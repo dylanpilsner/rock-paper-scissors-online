@@ -12,6 +12,7 @@
   },
   "scripts": {
     "dev": "nodemon index.ts",
-    "dev:front": "parcel serve ./client/index.html"
+    "dev:front": "parcel serve ./client/index.html",
+    "build": "parcel build ./client/index.html"
   }
 }
