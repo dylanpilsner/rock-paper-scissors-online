@@ -1,0 +1,17 @@
+{
+  "name": "rock-paper-scissor-online",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^18.11.0",
+    "@vaadin/router": "^1.7.4",
+    "nodemon": "^2.0.20",
+    "parcel": "^2.7.0",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "dev": "nodemon index.ts",
+    "dev:front": "parcel serve ./client/index.html"
+  }
+}
