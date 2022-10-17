@@ -5,9 +5,11 @@ const port = 3000;
 
 app.use(express.static("dist"));
 app.get("*", (req, res) => {
-  res.sendFile(__dirname + "/dist/index.html");
+  res.sendFile(__dirname + "../dist/index.html");
 });
 
-app.listen(port, () => {
-  console.log("hola soy express y estoy corriendo en el puerto " + port);
-});
+// app.listen(port, () => {
+//   console.log("hola soy express y estoy corriendo en el puerto " + port);
+// });
+
+console.log(__dirname);
