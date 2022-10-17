@@ -13,7 +13,7 @@
   "scripts": {
     "dev:front": "parcel serve ./client/index.html",
     "build:front": "parcel build ./client/index.html",
-    "dev": "nodemon --watch index.ts --exec ts-node dev.ts",
+    "dev:api": "nodemon ./server/index.ts",
     "test": "ava",
     "build:api": "tsc ./server/index.ts",
     "build": "yarn build:front && yarn build:api",
