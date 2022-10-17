@@ -24,7 +24,7 @@ const routes = [
 ];
 
 function isGithubPages() {
-  return location.host.includes("github.io");
+  return location.host.includes("dp-rock-paper-scissors.herokuapp.com");
 }
 
 export function initRoute(container: Element) {
@@ -32,7 +32,8 @@ export function initRoute(container: Element) {
   function handleRoute(route) {
     for (let r of routes) {
       if (r.path.test(route)) {
-        const el: any = r.component({ goTo: goTo });
+        const componentes = r.component as any;
+        const el = componentes({ goTo: goTo });
         container.firstChild?.remove();
         container.appendChild(el);
       }
