@@ -53,5 +53,7 @@ export function initRoute(container: Element) {
   window.onpopstate = () => {
     handleRoute(location.pathname);
   };
+  console.log(location.host);
+
   handleRoute(location.pathname);
 }
