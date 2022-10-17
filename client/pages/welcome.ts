@@ -16,7 +16,7 @@ export function initWelcomePage() {
     font-family:Anton;
     color: #009048;
     letter-spacing: 5px;
-    font-size:80px;
+    font-size:70px;
     margin:0 0 20px;
     text-align:center;
   }

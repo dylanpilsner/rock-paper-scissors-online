@@ -46,7 +46,7 @@ export function initRoute(container: Element) {
     handleRoute(completePath);
   }
 
-  if (location.host.includes("github.io")) {
+  if (location.host.includes("herokuapp")) {
     goTo("/welcome");
   }
 

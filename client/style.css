@@ -19,7 +19,7 @@ background-image:url(./assets/fondo.png);
   display:grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap:20px;
-  height:23vh;
+  height:10000vh;
   align-items:flex-end ;
 }
 
