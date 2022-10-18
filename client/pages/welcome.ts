@@ -72,7 +72,7 @@ export function initWelcomePage(param) {
   const newGame = div.querySelector(".new-game")!;
   newGame.addEventListener("click", (e) => {
     e.preventDefault;
-    param.goTo("/auth");
+    param.goTo("/new-game");
   });
 
   return div;
