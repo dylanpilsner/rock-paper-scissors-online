@@ -17,20 +17,36 @@ export function initWelcomePage() {
     color: #009048;
     letter-spacing: 5px;
     font-size:70px;
-    margin:0 0 20px;
+    margin:0 0 0px;
     text-align:center;
+  }
+
+  @media(min-width:1366px){
+    .title{
+      line-height:80px;
+
+    }
   }
 
   .button-container{
     width:100%;
+    height:100%;
     display:flex;
     flex-direction:column;
     align-items:center;
+    justify-content:center;
     gap:20px;
   }
 
+  .move-container{
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:20px;
+    /* height:100%; */
+    margin-top:10px;
+    align-items:flex-end ;
+  }
   
-
 
   `;
 

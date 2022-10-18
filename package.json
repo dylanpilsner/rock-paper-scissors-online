@@ -4,8 +4,8 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^18.11.0",
-    "@vaadin/router": "^1.7.4",
     "express": "^4.18.2",
+    "firebase-admin": "^11.2.0",
     "nodemon": "^2.0.20",
     "parcel": "^2.7.0",
     "typescript": "^4.8.4"

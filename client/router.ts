@@ -23,10 +23,6 @@ const routes = [
   ,
 ];
 
-function isGithubPages() {
-  return location.host.includes("dp-rock-paper-scissors.herokuapp.com");
-}
-
 export function initRoute(container: Element) {
   const BASE_PATH = "/rock-paper-scissor";
   function handleRoute(route) {
@@ -41,19 +37,18 @@ export function initRoute(container: Element) {
   }
 
   function goTo(path) {
-    const completePath = isGithubPages() ? BASE_PATH + path : path;
+    const completePath = path;
     history.pushState({}, "", completePath);
     handleRoute(completePath);
   }
 
-  if (location.host.includes("herokuapp")) {
+  if (location.pathname == "/") {
     goTo("/welcome");
   }
 
   window.onpopstate = () => {
     handleRoute(location.pathname);
   };
-  console.log(location.host);
 
   handleRoute(location.pathname);
 }

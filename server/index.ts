@@ -13,5 +13,3 @@ app.get("*", (req, res) => {
 app.listen(port, () => {
   console.log("hola soy express y estoy corriendo en el puerto " + port);
 });
-
-console.log(__dirname);

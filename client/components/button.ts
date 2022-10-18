@@ -20,6 +20,11 @@ class Button extends HTMLElement {
       color:#D8FCFC;
       border:10px #001997 solid;
       border-radius:10px;
+      cursor:pointer;
+    }
+    
+    .button:hover{
+      background-color:#0056ca;
     }
     
     `;

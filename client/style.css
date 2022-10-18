@@ -15,11 +15,4 @@ background-image:url(./assets/fondo.png);
   align-items: center;
 }
 
-.move-container{
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap:20px;
-  height:10000vh;
-  align-items:flex-end ;
-}
 
