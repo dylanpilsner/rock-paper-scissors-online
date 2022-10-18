@@ -1,4 +1,4 @@
-export function initWelcomePage() {
+export function initWelcomePage(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
   div.classList.add("main-container");
@@ -58,7 +58,7 @@ export function initWelcomePage() {
       <h1 class="title">Piedra, <br />Papel o <br />Tijera</h1>
      </div>
      <div class="button-container">
-      <my-button>Nueva partida</my-button>
+      <my-button class="new-game">Nueva partida</my-button>
       <my-button>Ingresar a una sala</my-button>
     </div>
       <div class="move-container">
@@ -69,5 +69,11 @@ export function initWelcomePage() {
   `;
 
   div.appendChild(style);
+  const newGame = div.querySelector(".new-game")!;
+  newGame.addEventListener("click", (e) => {
+    e.preventDefault;
+    param.goTo("/auth");
+  });
+
   return div;
 }
