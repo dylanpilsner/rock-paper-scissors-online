@@ -17,8 +17,9 @@ export function initWelcomePage() {
     color: #009048;
     letter-spacing: 5px;
     font-size:70px;
-    margin:0 0 0px;
+    margin:20px 0 0;
     text-align:center;
+    line-height:80px;
   }
 
   @media(min-width:1366px){
