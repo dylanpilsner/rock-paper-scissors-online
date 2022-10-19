@@ -69,6 +69,9 @@ export function initNewGame(param) {
     font-size:45px;
     text-align:center;
   }
+label{
+  display:block;
+}
 
   `;
 
@@ -79,9 +82,11 @@ export function initNewGame(param) {
       <h1 class="title">Piedra, <br />Papel o <br />Tijera</h1>
      </div>
      <form class="form">
-     <label class="your-name">Tu nombre
+     <label class="form-label">
+     <div class="your-name">Tu nombre</div> 
      <input class="input" placeholder="Ingresa tu nombre" name="name">
      </label>
+     
      <my-button>Empezar</my-button>
     </form>
       <div class="move-container">
