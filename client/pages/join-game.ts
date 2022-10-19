@@ -1,4 +1,4 @@
-export function initWelcomePage(param) {
+export function initJoinGame(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
   div.classList.add("main-container");
@@ -29,7 +29,18 @@ export function initWelcomePage(param) {
     }
   }
 
-  .button-container{
+  .your-name{
+    font-size: 45px;
+    font-weight:400;
+    text-align:center;
+    font-family:Odibee Sans;
+  }
+
+.input-container{
+  width:100%
+}
+
+  .form{
     width:100%;
     height:100%;
     display:flex;
@@ -47,7 +58,23 @@ export function initWelcomePage(param) {
     margin-top:10px;
     align-items:flex-end ;
   }
+
+  .inputs-container{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
   
+  .input{
+  
+    width:322px;
+    height:87px;
+    border: solid 10px #182460;
+    border-radius: 10px;
+    font-family:Odibee Sans;
+    font-size:45px;
+    text-align:center;
+  }
 
   `;
 
@@ -57,10 +84,13 @@ export function initWelcomePage(param) {
     <div class="welcome-container">
       <h1 class="title">Piedra, <br />Papel o <br />Tijera</h1>
      </div>
-     <div class="button-container">
-      <my-button class="new-game">Nueva partida</my-button>
-      <my-button class="join-game">Ingresar a una sala</my-button>
-    </div>
+     <form class="form">
+     <div class="inputs-container">
+     <input class="input" placeholder="Ingresa tu nombre" name="name">
+     <input class="input" placeholder="Código" name="code">
+     </div>
+     <my-button>Empezar</my-button>
+    </form>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
       <the-move move="papel"></the-move>
@@ -69,17 +99,11 @@ export function initWelcomePage(param) {
   `;
 
   div.appendChild(style);
-  const newGame = div.querySelector(".new-game")!;
-  newGame.addEventListener("click", (e) => {
-    e.preventDefault;
-    param.goTo("/new-game");
-  });
-
-  const joinGame = div.querySelector(".join-game");
-  joinGame.addEventListener("click", (e) => {
-    e.preventDefault;
-    param.goTo("/join-game");
-  });
+  // const newGame = div.querySelector(".new-game")!;
+  // newGame.addEventListener("click", (e) => {
+  //   e.preventDefault;
+  //   param.goTo("/new-game");
+  // });
 
   return div;
 }

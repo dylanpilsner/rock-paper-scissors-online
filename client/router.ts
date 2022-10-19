@@ -2,6 +2,8 @@ import { initWelcomePage } from "./pages/welcome";
 import { instructions } from "./pages/instructions";
 import { play } from "./pages/play";
 import { results } from "./pages/results";
+import { initNewGame } from "./pages/new-game";
+import { initJoinGame } from "./pages/join-game";
 
 const routes = [
   {
@@ -20,7 +22,14 @@ const routes = [
     path: /\/results/,
     component: results,
   },
-  ,
+  {
+    path: /\/new-game/,
+    component: initNewGame,
+  },
+  {
+    path: /\/join-game/,
+    component: initJoinGame,
+  },
 ];
 
 export function initRoute(container: Element) {
