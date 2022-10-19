@@ -84,7 +84,7 @@ label{
      <form class="form">
      <label class="form-label">
      <div class="your-name">Tu nombre</div> 
-     <input class="input" placeholder="Ingresa tu nombre" name="name">
+     <input  type="text" class="input" placeholder="Ingresa tu nombre" name="name">
      </label>
      
      <my-button>Empezar</my-button>
