@@ -1,3 +1,5 @@
+import { state } from "../state";
+
 export function initNewGame(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
@@ -69,10 +71,19 @@ export function initNewGame(param) {
     font-size:45px;
     text-align:center;
   }
-label{
-  display:block;
+// label{
+//   display:block;
+// }
+
+.button{
+  background-color:transparent;
+  border:none;
 }
 
+.void{
+  border: solid 10px #cb0000;
+  border-radius: 10px;
+}
   `;
 
   div.innerHTML =
@@ -84,10 +95,11 @@ label{
      <form class="form">
      <label class="form-label">
      <div class="your-name">Tu nombre</div> 
-     <input  type="text" class="input" placeholder="Ingresa tu nombre" name="name">
+     <input  type="text" class="input" placeholder="Ingresa tu nombre" name="test">
      </label>
-     
-     <my-button>Empezar</my-button>
+     <button class="button">
+     <my-button type="submit" class="start">Empezar</my-button>
+     </button>
     </form>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
@@ -97,10 +109,30 @@ label{
   `;
 
   div.appendChild(style);
-  // const newGame = div.querySelector(".new-game")!;
-  // newGame.addEventListener("click", (e) => {
+  const start = div.querySelector(".start")!;
+  const form: any = div.querySelector(".form")!;
+  console.log(form.test.value);
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const target = e.target as any;
+    const input = div.querySelector(".input");
+    if (target["test"].value == "") {
+      input.classList.add("void");
+      return window.alert("Please enter your name");
+    } else {
+      input.classList.remove("void");
+      state.setNameAndCreateOrGetUserId(target["test"].value);
+      state.createNewRoom();
+      param.goTo("/lobby");
+    }
+  });
+
+  // start.addEventListener("click", (e) => {
   //   e.preventDefault;
-  //   param.goTo("/new-game");
+  //   console.log(form.test.value);
+
+  // state.setName()
   // });
 
   return div;
