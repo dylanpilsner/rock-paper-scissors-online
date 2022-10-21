@@ -32,7 +32,12 @@ export function initLobby(param) {
     
     .player-one {
     }
-    .player-two {
+    .disconnected{
+      display:none;
+    }
+    
+    .connected {
+      display:inherit;
       color:#FF6442
     }
     .room-information-container {
@@ -43,7 +48,6 @@ export function initLobby(param) {
       font-size:24px;
     }
     .room-code {
-      color:#FF6442
     
     }
     
@@ -84,20 +88,17 @@ export function initLobby(param) {
     `
     <header class="header">
     <div class="players-container">
-    <span class="player-one">${"test"}:0</span>
+    <span class="player-one">${gameState.name}:0</span>
     <span class="player-two">Luciana:0</span>
     </div>
     <div class="room-information-container">
     <span>Sala</span>
-    <span class="room-code">${"test"}</span>
+    <span class="room-code">${gameState.publicId}</span>
     </div>
     </header>
     <div class="instructions-container">
-      <h1 class="title">Compartí el código: <br /> <span class="code">${
-        gameState.publicId
-      }</span> <br /> con tu contrincante</h1>
+      <h1 class="title">Compartí el código: <br /> <span class="code">${gameState.publicId}</span> <br /> con tu contrincante</h1>
      </div>
-     <button>Test</button>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
       <the-move move="papel"></the-move>
@@ -106,8 +107,12 @@ export function initLobby(param) {
   `;
   div.appendChild(style);
 
-  const code = div.querySelector(".code");
-  console.log(code);
+  const playerTwo = div.querySelector(".player-two");
+  if (gameState.oponentName == "") {
+    playerTwo.classList.add("disconnected");
+  } else {
+    playerTwo.classList.add("connected");
+  }
 
   // const form: any = div.querySelector(".form")!;
   // console.log(form.test.value);

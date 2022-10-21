@@ -16,6 +16,7 @@ const state = {
       score: 0,
       publicId: "",
       privateId: "",
+      oponentName: "",
     },
   },
 
