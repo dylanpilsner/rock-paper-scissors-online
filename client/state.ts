@@ -1,4 +1,6 @@
 export { state };
+import { rtdb } from "./rtdb";
+import { getDatabase, onValue, ref } from "firebase/database";
 
 const API_BASE_URL =
   process.env.NODE_ENV == "production"
@@ -17,10 +19,20 @@ const state = {
       publicId: "",
       privateId: "",
       oponentName: "",
+      player: 0,
     },
   },
 
   listeners: [],
+
+  listenDataBase() {
+    const currentState = this.getstate();
+    const room = ref(rtdb, `rooms/${currentState.privateId}`);
+    onValue(room, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+    });
+  },
 
   getState() {
     return this.data;
@@ -71,21 +83,8 @@ const state = {
 
     currentState.gameState.publicId = data.publicId;
     currentState.gameState.privateId = data.privateId;
+    currentState.gameState.player = 1;
     this.setState(currentState.gameState);
-    // const currentState = this.getState();
-    // fetch(API_BASE_URL + "/new-room", {
-    //   method: "post",
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    //   body: JSON.stringify(currentState),
-    // }).then((res) => {
-    //   res.json().then((data) => {
-    //     currentState.gameState.publicId = data.id;
-    //     currentState.gameState.privateId = data.longId;
-    //     this.setState(currentState.gameState);
-    //   });
-    // });
   },
 
   subscribe(callback: any) {
