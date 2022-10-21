@@ -50,7 +50,7 @@ export function initRoute(container: Element) {
     }
   }
 
-  function goTo(path) {
+  async function goTo(path) {
     const completePath = path;
     history.pushState({}, "", completePath);
     handleRoute(completePath);

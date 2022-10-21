@@ -11,38 +11,38 @@ app.use(express.json());
 const userCollection = firestore.collection("users");
 const roomCollection = firestore.collection("rooms");
 
-app.post("/new-room", (req, res) => {
-  const { gameState } = req.body;
+app.post("/new-room", async (req, res) => {
+  const { gameState, name, userId } = req.body;
   const roomRef = rtdb.ref("rooms/" + nanoid());
-  roomRef.set(gameState).then(() => {
-    const roomLongId = roomRef.key;
-    const roomId = 1000 + Math.floor(Math.random() * 999);
-    roomCollection
-      .doc(roomId.toString())
-      .set({ roomLongId })
-      .then(() => {
-        res.json({
-          id: roomId.toString(),
-          longId: roomLongId,
-        });
-      });
+  await roomRef.set({
+    player1: {
+      name,
+      userId,
+      privateId: "",
+      publicId: "",
+      choice: "",
+      online: true,
+      start: false,
+      score: 0,
+    },
   });
+  const privateId = roomRef.key;
+  const publicId = 1000 + Math.floor(Math.random() * 999);
+  await roomRef.child("player1/").update({ publicId, privateId });
+  const newRoomDoc = roomCollection.doc(publicId.toString());
+  await newRoomDoc.set({ privateId, publicId });
+  const response = res.json({ publicId, privateId });
 });
 
-app.post("/auth", (req, res) => {
+app.post("/auth", async (req, res) => {
   const { name } = req.body;
-  userCollection
-    .where("name", "==", name)
-    .get()
-    .then((searchResponse) => {
-      if (searchResponse.empty) {
-        userCollection.add({ name }).then((newUserRef) => {
-          res.json({ id: newUserRef.id });
-        });
-      } else {
-        res.json({ id: searchResponse.docs[0].id });
-      }
-    });
+  const nameDoc = await userCollection.where("name", "==", name).get();
+  if (nameDoc.empty) {
+    const newUserDoc = await userCollection.add({ name });
+    res.json({ userId: newUserDoc.id, name });
+  } else {
+    res.json({ userId: nameDoc.docs[0].id });
+  }
 });
 
 // app.get("/test", (req, res) => {

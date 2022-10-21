@@ -113,7 +113,7 @@ export function initNewGame(param) {
   const form: any = div.querySelector(".form")!;
   console.log(form.test.value);
 
-  form.addEventListener("submit", (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const target = e.target as any;
     const input = div.querySelector(".input");
@@ -122,8 +122,8 @@ export function initNewGame(param) {
       return window.alert("Please enter your name");
     } else {
       input.classList.remove("void");
-      state.setNameAndCreateOrGetUserId(target["test"].value);
-      state.createNewRoom();
+      await state.setNameAndCreateOrGetUserId(target["test"].value);
+      await state.createNewRoom();
       param.goTo("/lobby");
     }
   });

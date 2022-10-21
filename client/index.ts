@@ -3,8 +3,8 @@ import "./components/button";
 import "./components/moves";
 import { state } from "./state";
 
-(function () {
-  const rootEl = document.querySelector(".root");
+(async function () {
+  const rootEl = await document.querySelector(".root");
   // state.init();
   initRoute(rootEl);
 })();

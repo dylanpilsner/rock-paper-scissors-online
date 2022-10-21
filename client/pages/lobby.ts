@@ -84,16 +84,18 @@ export function initLobby(param) {
     `
     <header class="header">
     <div class="players-container">
-    <span class="player-one">Dylan:0</span>
+    <span class="player-one">${"test"}:0</span>
     <span class="player-two">Luciana:0</span>
     </div>
     <div class="room-information-container">
     <span>Sala</span>
-    <span class="room-code">${gameState.publicId}</span>
+    <span class="room-code">${"test"}</span>
     </div>
     </header>
     <div class="instructions-container">
-      <h1 class="title">Compartí el código: <br /> <span class="code">${gameState.userId}</span> <br /> con tu contrincante</h1>
+      <h1 class="title">Compartí el código: <br /> <span class="code">${
+        gameState.publicId
+      }</span> <br /> con tu contrincante</h1>
      </div>
      <button>Test</button>
       <div class="move-container">
@@ -102,7 +104,6 @@ export function initLobby(param) {
       <the-move move="tijera"></the-move>
     </div>
   `;
-  console.log(gameState);
   div.appendChild(style);
 
   const code = div.querySelector(".code");

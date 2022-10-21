@@ -31,8 +31,8 @@ const state = {
     for (let cb of this.listeners) {
       cb(newState);
     }
-    console.log("Soy el state, he cambiado: ");
-    console.log(currentState);
+    // console.log("Soy el state, he cambiado: ");
+    // console.log(currentState);
   },
 
   // setName(name) {
@@ -41,43 +41,67 @@ const state = {
   //   this.setState(currentGameState);
   // },
 
-  setNameAndCreateOrGetUserId(name) {
-    // console.log(API_BASE_URL + "/auth");
-    const currentState = this.getState().gameState;
-    currentState.name = name;
-    currentState.online = true;
-    fetch(API_BASE_URL + "/auth", {
+  async setNameAndCreateOrGetUserId(name) {
+    const currentState = this.getState();
+    const fetching = await fetch(API_BASE_URL + "/auth", {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(currentState).toLowerCase(),
-    }).then((res) => {
-      res.json().then((data) => {
-        currentState.userId = data.id;
-        this.setState(currentState);
-      });
+      body: JSON.stringify({ name }).toLowerCase(),
     });
+    const res = await fetching.json();
+    currentState.gameState.name = name;
+    currentState.gameState.userId = res.userId;
+    this.setState(currentState.gameState);
   },
 
-  createNewRoom() {
+  async createNewRoom() {
     const currentState = this.getState();
-    fetch(API_BASE_URL + "/new-room", {
+    const res = await fetch(`${API_BASE_URL}/new-room`, {
       method: "post",
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(currentState),
-    }).then((res) => {
-      res.json().then((data) => {
-        currentState.gameState.publicId = data.id;
-        currentState.gameState.privateId = data.longId;
-        this.setState(currentState.gameState);
-      });
+      body: JSON.stringify(currentState.gameState),
     });
+
+    const data = await res.json();
+
+    currentState.gameState.publicId = data.publicId;
+    currentState.gameState.privateId = data.privateId;
+    this.setState(currentState.gameState);
+    // const currentState = this.getState();
+    // fetch(API_BASE_URL + "/new-room", {
+    //   method: "post",
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    //   body: JSON.stringify(currentState),
+    // }).then((res) => {
+    //   res.json().then((data) => {
+    //     currentState.gameState.publicId = data.id;
+    //     currentState.gameState.privateId = data.longId;
+    //     this.setState(currentState.gameState);
+    //   });
+    // });
   },
 
   subscribe(callback: any) {
     this.listeners.push(callback);
   },
+
+  // async test() {
+  //   const currentState = this.getState().gameState;
+  //   const res = await fetch(API_BASE_URL + "/auth", {
+  //     method: "post",
+  //     headers: {
+  //       "content-type": "application/json",
+  //     },
+  //     body: JSON.stringify(currentState).toLowerCase(),
+  //   });
+
+  //   const resolve = await res.json();
+  //   console.log(resolve);
+  // },
 };
