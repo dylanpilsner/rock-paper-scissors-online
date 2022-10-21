@@ -88,7 +88,7 @@ export function initLobby(param) {
     `
     <header class="header">
     <div class="players-container">
-    <span class="player-one">${gameState.name}:0</span>
+    <span class="player-one">${gameState.name}:${gameState.yourScore}</span>
     <span class="player-two">Luciana:0</span>
     </div>
     <div class="room-information-container">

@@ -12,7 +12,7 @@ const userCollection = firestore.collection("users");
 const roomCollection = firestore.collection("rooms");
 
 app.post("/new-room", async (req, res) => {
-  const { gameState, name, userId } = req.body;
+  const { name, userId } = req.body;
   const roomRef = rtdb.ref("rooms/" + nanoid());
   await roomRef.set({
     player1: {
@@ -45,9 +45,13 @@ app.post("/auth", async (req, res) => {
   }
 });
 
-// app.get("/test", (req, res) => {
-//   res.json("testeando API");
-// });
+app.get("/join-game/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { name } = req.body;
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+  const player2 = await roomRef.update({ player2: { name } });
+  res.json(player2);
+});
 
 app.use(express.static("dist"));
 app.get("*", (req, res) => {
