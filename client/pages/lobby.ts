@@ -89,7 +89,7 @@ export function initLobby(param) {
     <header class="header">
     <div class="players-container">
     <span class="player-one">${gameState.name}:${gameState.yourScore}</span>
-    <span class="player-two">Luciana:0</span>
+    <span class="player-two">${gameState.oponentName}: ${gameState.oponentScore}</span>
     </div>
     <div class="room-information-container">
     <span>Sala</span>
@@ -113,6 +113,12 @@ export function initLobby(param) {
   } else {
     playerTwo.classList.add("connected");
   }
+
+  console.log(gameState);
+
+  window.addEventListener("beforeunload", async (e) => {
+    await state.disconnectPlayer();
+  });
 
   // const form: any = div.querySelector(".form")!;
   // console.log(form.test.value);

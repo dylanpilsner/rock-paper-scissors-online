@@ -1,3 +1,5 @@
+import { state } from "../state";
+
 export function initJoinGame(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
@@ -76,6 +78,11 @@ export function initJoinGame(param) {
     text-align:center;
   }
 
+  .button{
+    background-color:transparent;
+    border:none;
+  }
+
   `;
 
   div.innerHTML =
@@ -89,7 +96,9 @@ export function initJoinGame(param) {
      <input class="input" placeholder="Ingresa tu nombre" name="name">
      <input class="input" placeholder="Código" name="code">
      </div>
+     <button class="button">
      <my-button>Empezar</my-button>
+     </button>
     </form>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
@@ -99,11 +108,38 @@ export function initJoinGame(param) {
   `;
 
   div.appendChild(style);
-  // const newGame = div.querySelector(".new-game")!;
-  // newGame.addEventListener("click", (e) => {
-  //   e.preventDefault;
-  //   param.goTo("/new-game");
-  // });
+
+  console.log(state.getState());
+
+  const form: any = div.querySelector(".form")!;
+  // state.listenDataBase();
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const target = e.target as any;
+    await state.setNameAndCreateOrGetUserId(target["name"].value);
+    console.log(target["name"].value);
+
+    if (
+      (await state.getRoomInformation(target["code"].value)) ==
+      "room inexistente"
+    ) {
+      window.alert(
+        "Esta sala no existe, por favor verifique nuevamente el código o cree una nueva sala."
+      );
+    } else {
+      await state.joinGame();
+      await state.setNameAndCreateOrGetUserId(target["name"].value);
+      param.goTo("/lobby");
+      await state.listenDataBase();
+    }
+    console.log(target.code.value);
+  });
+
+  // const form: any = div.querySelector(".form")!;
+
+  // form.addEventListener("submit", async (e) => {
+  //   e.preventDefault();
 
   return div;
 }

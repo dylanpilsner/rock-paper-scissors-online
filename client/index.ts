@@ -7,4 +7,5 @@ import { state } from "./state";
   const rootEl = await document.querySelector(".root");
   // state.init();
   initRoute(rootEl);
+  // state.listenDataBase();
 })();

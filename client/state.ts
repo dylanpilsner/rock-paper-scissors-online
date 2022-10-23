@@ -26,11 +26,23 @@ const state = {
 
   listeners: [],
 
-  listenDataBase() {
-    const currentState = this.getstate();
-    const room = ref(rtdb, `rooms/${currentState.privateId}`);
-    onValue(room, (snapshot) => {
-      const data = snapshot.val();
+  async listenDataBase() {
+    const currentState = this.getState();
+    const gameState = this.getState().gameState;
+    const room = ref(
+      rtdb,
+      `rooms/${gameState.privateId}/player${gameState.player}`
+    );
+    onValue(room, async (snapshot) => {
+      const data = await snapshot.val();
+      // currentState.gameState = data
+      // this.setState(currentState.gameState);
+      console.log(data);
+    });
+
+    const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
+    onValue(roomPlayers, async (snapshot) => {
+      const data = await snapshot.val();
       console.log(data);
     });
   },
@@ -45,15 +57,9 @@ const state = {
     for (let cb of this.listeners) {
       cb(newState);
     }
-    // console.log("Soy el state, he cambiado: ");
-    // console.log(currentState);
+    console.log("Soy el state, he cambiado: ");
+    console.log(currentState);
   },
-
-  // setName(name) {
-  //   const currentGameState = this.getState().gameState;
-  //   currentGameState.name = name;
-  //   this.setState(currentGameState);
-  // },
 
   async setNameAndCreateOrGetUserId(name) {
     const currentState = this.getState();
@@ -67,6 +73,8 @@ const state = {
     const res = await fetching.json();
     currentState.gameState.name = name;
     currentState.gameState.userId = res.userId;
+    console.log(res);
+
     this.setState(currentState.gameState);
   },
 
@@ -88,21 +96,60 @@ const state = {
     this.setState(currentState.gameState);
   },
 
+  async getRoomInformation(publicId) {
+    const currentState = this.getState();
+    const res = await fetch(`${API_BASE_URL}/room-information/${publicId}`);
+    const data = await res.json();
+    console.log(data);
+    const error = data.message;
+    if (error == "Este room no existe") {
+      return "room inexistente";
+    } else {
+      currentState.gameState.privateId = data.privateId;
+      currentState.gameState.publicId = publicId;
+      this.setState(currentState.gameState);
+    }
+  },
+
+  async joinGame() {
+    const currentState = this.getState();
+
+    const res = await fetch(
+      `${API_BASE_URL}/join-game/${currentState.gameState.privateId}`,
+      {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(currentState),
+      }
+    );
+    const data = await res.json();
+    if (data.message != "sala llena") {
+      currentState.gameState = data[0];
+      currentState.gameState.online = true;
+      this.setState(currentState.gameState);
+    } else {
+      window.alert("Esta sala está llena, por favor crea una nueva sala.");
+    }
+  },
+
+  async disconnectPlayer() {
+    const gameState = this.getState().gameState;
+    const res = await fetch(
+      `${API_BASE_URL}/disconnect-player/${gameState.privateId}?userId=${gameState.userId}`,
+      {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    console.log(data);
+  },
+
   subscribe(callback: any) {
     this.listeners.push(callback);
   },
-
-  // async test() {
-  //   const currentState = this.getState().gameState;
-  //   const res = await fetch(API_BASE_URL + "/auth", {
-  //     method: "post",
-  //     headers: {
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(currentState).toLowerCase(),
-  //   });
-
-  //   const resolve = await res.json();
-  //   console.log(resolve);
-  // },
 };

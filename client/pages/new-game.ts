@@ -1,3 +1,4 @@
+import { stat } from "fs";
 import { state } from "../state";
 
 export function initNewGame(param) {
@@ -95,7 +96,7 @@ export function initNewGame(param) {
      <form class="form">
      <label class="form-label">
      <div class="your-name">Tu nombre</div> 
-     <input  type="text" class="input" placeholder="Ingresa tu nombre" name="test">
+     <input  type="text" class="input" placeholder="Ingresa tu nombre" name="nombre">
      </label>
      <button class="button">
      <my-button type="submit" class="start">Empezar</my-button>
@@ -111,29 +112,21 @@ export function initNewGame(param) {
   div.appendChild(style);
   const start = div.querySelector(".start")!;
   const form: any = div.querySelector(".form")!;
-  console.log(form.test.value);
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const target = e.target as any;
     const input = div.querySelector(".input");
-    if (target["test"].value == "") {
+    if (target["nombre"].value == "") {
       input.classList.add("void");
       return window.alert("Please enter your name");
     } else {
       input.classList.remove("void");
-      await state.setNameAndCreateOrGetUserId(target["test"].value);
+      await state.setNameAndCreateOrGetUserId(target["nombre"].value);
       await state.createNewRoom();
       param.goTo("/lobby");
     }
   });
-
-  // start.addEventListener("click", (e) => {
-  //   e.preventDefault;
-  //   console.log(form.test.value);
-
-  // state.setName()
-  // });
 
   return div;
 }

@@ -1,5 +1,6 @@
 import { firestore, rtdb } from "./db";
 import { nanoid } from "nanoid";
+import * as lodash from "lodash";
 
 import * as express from "express";
 import * as path from "path";
@@ -14,6 +15,7 @@ const roomCollection = firestore.collection("rooms");
 app.post("/new-room", async (req, res) => {
   const { name, userId } = req.body;
   const roomRef = rtdb.ref("rooms/" + nanoid());
+
   await roomRef.set({
     player1: {
       name,
@@ -21,9 +23,12 @@ app.post("/new-room", async (req, res) => {
       privateId: "",
       publicId: "",
       choice: "",
+      opponentName: "",
+      OpponentScore: 0,
+      player: 1,
       online: true,
       start: false,
-      score: 0,
+      yourScore: 0,
     },
   });
   const privateId = roomRef.key;
@@ -45,12 +50,75 @@ app.post("/auth", async (req, res) => {
   }
 });
 
-app.get("/join-game/:privateId", async (req, res) => {
+app.get("/room-information/:publicId", async (req, res) => {
+  const { publicId } = req.params;
+  const roomDoc = roomCollection.doc(publicId);
+  const roomInformation = await roomDoc.get();
+  if (!roomInformation.data()) {
+    res.json({ message: "Este room no existe" });
+  } else {
+    res.json({ privateId: roomInformation.data().privateId });
+  }
+});
+
+app.post("/disconnect-player/:privateId", async (req, res) => {
   const { privateId } = req.params;
-  const { name } = req.body;
+  const { userId } = req.query;
   const roomRef = rtdb.ref(`rooms/${privateId}`);
-  const player2 = await roomRef.update({ player2: { name } });
-  res.json(player2);
+  const roomRefData = await (await roomRef.get()).val();
+  const roomRefArray = lodash.map(roomRefData);
+  const validateUser = () => {
+    return roomRefArray.filter((i) => {
+      return i.userId.includes(userId);
+    });
+  };
+  await roomRef
+    .child(`player${validateUser()[0].player}`)
+    .update({ online: false });
+  res.json({ message: "usuario desconectado con éxito" });
+});
+
+app.post("/join-game/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { gameState } = req.body;
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+
+  const roomRefData = await (await roomRef.get()).val();
+  const roomRefArray = lodash.map(roomRefData);
+  const validateUser = () => {
+    return roomRefArray.filter((i) => {
+      return i.userId.includes(gameState.userId);
+    });
+  };
+  // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+  if (roomRefArray.length == 1 && validateUser() == "") {
+    const player2 = await roomRef.update({
+      player2: gameState,
+    });
+    // if ((await await (await roomRef.get()).val()["player2"].player) == 0) {
+    await roomRef.child("player2").update({ player: 2 });
+    await roomRef.child("player2").update({ online: true });
+    // }
+
+    res.json([await (await roomRef.get()).val()["player2"]]);
+  }
+  if (roomRefArray.length == 2 && validateUser() == "") {
+    res.json({ message: "sala llena" });
+  }
+
+  if (validateUser() != "") {
+    res.json(validateUser());
+    await roomRef
+      .child(`player${validateUser()[0].player}`)
+      .update({ online: true });
+  }
+});
+
+app.post("/test", (req, res) => {
+  window.addEventListener("beforeunload", (e) => {
+    res.json({ message: "ok" });
+  });
 });
 
 app.use(express.static("dist"));
