@@ -35,15 +35,43 @@ const state = {
     );
     onValue(room, async (snapshot) => {
       const data = await snapshot.val();
-      // currentState.gameState = data
-      // this.setState(currentState.gameState);
-      console.log(data);
+      currentState.gameState = data;
+      this.setState(currentState.gameState);
     });
+  },
 
+  async setOponentInformation() {
+    const currentState = this.getState();
+    const gameState = this.getState().gameState;
+    const room = ref(rtdb, `rooms/${gameState.privateId}`);
+
+    onValue(room, async (snapshot) => {
+      const data = await snapshot.val();
+      const res = await fetch(
+        `${API_BASE_URL}/set-opponent-information/${gameState.privateId}`,
+        {
+          method: "post",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(gameState),
+        }
+      );
+      const opponentData = await res.json();
+    });
+  },
+
+  async redirectToWaitingRoom(callback) {
+    const gameState = this.getState().gameState;
     const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
     onValue(roomPlayers, async (snapshot) => {
       const data = await snapshot.val();
-      console.log(data);
+      if (data.player1.online === true && data.player2.online === true) {
+        callback("/waiting-room");
+      }
+
+      // if (data.player1 == true && data.player2 == true) {
+      //   return true;
+      // } else return false;
+      // // console.(data);
     });
   },
 
@@ -73,7 +101,6 @@ const state = {
     const res = await fetching.json();
     currentState.gameState.name = name;
     currentState.gameState.userId = res.userId;
-    console.log(res);
 
     this.setState(currentState.gameState);
   },
@@ -100,7 +127,6 @@ const state = {
     const currentState = this.getState();
     const res = await fetch(`${API_BASE_URL}/room-information/${publicId}`);
     const data = await res.json();
-    console.log(data);
     const error = data.message;
     if (error == "Este room no existe") {
       return "room inexistente";
@@ -125,13 +151,11 @@ const state = {
       }
     );
     const data = await res.json();
-    if (data.message != "sala llena") {
-      currentState.gameState = data[0];
-      currentState.gameState.online = true;
-      this.setState(currentState.gameState);
-    } else {
-      window.alert("Esta sala está llena, por favor crea una nueva sala.");
-    }
+    currentState.gameState = data[0];
+    this.setState(currentState.gameState);
+    console.log(data);
+
+    return data;
   },
 
   async disconnectPlayer() {
@@ -146,7 +170,26 @@ const state = {
       }
     );
     const data = await res.json();
-    console.log(data);
+    return data;
+  },
+
+  resetAllInformation() {
+    const currentState = this.getState().gameState;
+    currentState.userId = "";
+    currentState.choice = "";
+    currentState.name = "";
+    currentState.online = false;
+    currentState.start = false;
+    currentState.yourScore = 0;
+    currentState.publicId = "";
+    currentState.start = false;
+    currentState.yourScore = 0;
+    currentState.publicId = "";
+    currentState.privateId = "";
+    currentState.oponentName = "";
+    currentState.oponentScore = 0;
+    currentState.player = 0;
+    this.setState(currentState);
   },
 
   subscribe(callback: any) {

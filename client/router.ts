@@ -5,6 +5,7 @@ import { results } from "./pages/results";
 import { initNewGame } from "./pages/new-game";
 import { initJoinGame } from "./pages/join-game";
 import { initLobby } from "./pages/lobby";
+import { initWaitingRoom } from "./pages/waiting-room";
 
 const routes = [
   {
@@ -34,6 +35,10 @@ const routes = [
   {
     path: /\/lobby/,
     component: initLobby,
+  },
+  {
+    path: /\/waiting-room/,
+    component: initWaitingRoom,
   },
 ];
 

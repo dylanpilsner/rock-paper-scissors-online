@@ -24,7 +24,7 @@ app.post("/new-room", async (req, res) => {
       publicId: "",
       choice: "",
       opponentName: "",
-      OpponentScore: 0,
+      opponentScore: 0,
       player: 1,
       online: true,
       start: false,
@@ -59,6 +59,29 @@ app.get("/room-information/:publicId", async (req, res) => {
   } else {
     res.json({ privateId: roomInformation.data().privateId });
   }
+});
+
+app.post("/set-opponent-information/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { player } = req.body;
+
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+  const roomInformation = await (await roomRef.get()).val();
+  const roomInformationArray = lodash.map(roomInformation);
+  const validateOpponent = () => {
+    return roomInformationArray.filter((i) => {
+      return i.player != player;
+    });
+  };
+
+  await roomRef.child(`player1`).update({
+    opponentName: validateOpponent()[0].name,
+    opponentScore: validateOpponent()[0].yourScore,
+  });
+
+  // console.log(validateOpponent()[0].name);
+
+  res.json(validateOpponent());
 });
 
 app.post("/disconnect-player/:privateId", async (req, res) => {

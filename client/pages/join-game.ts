@@ -66,9 +66,9 @@ export function initJoinGame(param) {
     flex-direction:column;
     gap:10px;
   }
-  
+
   .input{
-  
+
     width:322px;
     height:87px;
     border: solid 10px #182460;
@@ -109,8 +109,6 @@ export function initJoinGame(param) {
 
   div.appendChild(style);
 
-  console.log(state.getState());
-
   const form: any = div.querySelector(".form")!;
   // state.listenDataBase();
 
@@ -118,7 +116,6 @@ export function initJoinGame(param) {
     e.preventDefault();
     const target = e.target as any;
     await state.setNameAndCreateOrGetUserId(target["name"].value);
-    console.log(target["name"].value);
 
     if (
       (await state.getRoomInformation(target["code"].value)) ==
@@ -128,12 +125,22 @@ export function initJoinGame(param) {
         "Esta sala no existe, por favor verifique nuevamente el código o cree una nueva sala."
       );
     } else {
-      await state.joinGame();
-      await state.setNameAndCreateOrGetUserId(target["name"].value);
-      param.goTo("/lobby");
-      await state.listenDataBase();
+      let test = await state.joinGame();
+      if (test.message == "sala llena") {
+        window.alert(
+          "La sala se encuentra llena, por favor ingrese a otra o cree una nueva."
+        );
+        location.reload();
+      } else {
+        await state.setNameAndCreateOrGetUserId(target["name"].value);
+        // await state.joinGame();
+        // param.goTo("/lobby");
+        await state.listenDataBase();
+        // const test = param.goTo("/test");
+
+        await state.redirectToWaitingRoom(param.goTo);
+      }
     }
-    console.log(target.code.value);
   });
 
   // const form: any = div.querySelector(".form")!;

@@ -114,8 +114,6 @@ export function initLobby(param) {
     playerTwo.classList.add("connected");
   }
 
-  console.log(gameState);
-
   window.addEventListener("beforeunload", async (e) => {
     await state.disconnectPlayer();
   });
