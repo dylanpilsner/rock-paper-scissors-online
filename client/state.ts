@@ -18,8 +18,8 @@ const state = {
       yourScore: 0,
       publicId: "",
       privateId: "",
-      oponentName: "",
-      oponentScore: 0,
+      opponentName: "",
+      opponentScore: 0,
       player: 0,
     },
   },
@@ -99,7 +99,7 @@ const state = {
       body: JSON.stringify({ name }).toLowerCase(),
     });
     const res = await fetching.json();
-    currentState.gameState.name = name;
+    currentState.gameState.name = res.name;
     currentState.gameState.userId = res.userId;
 
     this.setState(currentState.gameState);

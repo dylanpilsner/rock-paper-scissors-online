@@ -132,13 +132,13 @@ export function initJoinGame(param) {
         );
         location.reload();
       } else {
-        await state.setNameAndCreateOrGetUserId(target["name"].value);
-        // await state.joinGame();
-        // param.goTo("/lobby");
         await state.listenDataBase();
+        await state.setNameAndCreateOrGetUserId(target["name"].value);
+        param.goTo("/lobby");
+        // await state.joinGame();
         // const test = param.goTo("/test");
 
-        await state.redirectToWaitingRoom(param.goTo);
+        //     // await state.redirectToWaitingRoom(param.goTo);
       }
     }
   });

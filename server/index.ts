@@ -46,7 +46,7 @@ app.post("/auth", async (req, res) => {
     const newUserDoc = await userCollection.add({ name });
     res.json({ userId: newUserDoc.id, name });
   } else {
-    res.json({ userId: nameDoc.docs[0].id });
+    res.json({ userId: nameDoc.docs[0].id, name });
   }
 });
 
@@ -74,7 +74,7 @@ app.post("/set-opponent-information/:privateId", async (req, res) => {
     });
   };
 
-  await roomRef.child(`player1`).update({
+  await roomRef.child(`player${player}`).update({
     opponentName: validateOpponent()[0].name,
     opponentScore: validateOpponent()[0].yourScore,
   });
