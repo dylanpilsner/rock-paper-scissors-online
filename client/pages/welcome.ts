@@ -75,7 +75,7 @@ export function initWelcomePage(param) {
     param.goTo("/new-game");
   });
 
-  const joinGame = div.querySelector(".join-game");
+  const joinGame = div.querySelector(".join-game")!;
   joinGame.addEventListener("click", (e) => {
     e.preventDefault;
     param.goTo("/join-game");

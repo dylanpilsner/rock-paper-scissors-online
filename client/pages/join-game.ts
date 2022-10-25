@@ -1,4 +1,4 @@
-import { state } from "../state";
+import { API_BASE_URL, state } from "../state";
 
 export function initJoinGame(param) {
   const div = document.createElement("div");
@@ -85,6 +85,8 @@ export function initJoinGame(param) {
 
   `;
 
+  // console.log(API_BASE_URL);
+
   div.innerHTML =
     /*html*/
     `
@@ -107,6 +109,7 @@ export function initJoinGame(param) {
     </div>
   `;
 
+  console.log(API_BASE_URL);
   div.appendChild(style);
 
   const form: any = div.querySelector(".form")!;

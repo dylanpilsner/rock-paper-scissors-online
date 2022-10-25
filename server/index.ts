@@ -61,7 +61,7 @@ app.get("/room-information/:publicId", async (req, res) => {
   }
 });
 
-app.post("/set-opponent-information/:privateId", async (req, res) => {
+app.put("/set-opponent-information/:privateId", async (req, res) => {
   const { privateId } = req.params;
   const { player } = req.body;
 
@@ -138,10 +138,12 @@ app.post("/join-game/:privateId", async (req, res) => {
   }
 });
 
-app.post("/test", (req, res) => {
-  window.addEventListener("beforeunload", (e) => {
-    res.json({ message: "ok" });
-  });
+app.put("/set-player-status/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { status, player } = req.body;
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+  await roomRef.child(`player${player}`).update({ start: status });
+  res.json({ message: "status cambiado con éxito" });
 });
 
 app.use(express.static("dist"));

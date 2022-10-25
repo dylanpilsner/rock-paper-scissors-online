@@ -1,3 +1,4 @@
+import { start } from "repl";
 import { state } from "../state";
 
 export function initWaitingRoom(param) {
@@ -62,7 +63,7 @@ export function initWaitingRoom(param) {
       margin:20px 0 0;
       text-align:center;
       align-self:center;
-      line-height:65px;
+      line-height:60px;
     }
     
     .code{
@@ -98,7 +99,7 @@ export function initWaitingRoom(param) {
       <h1 class="title">Presioná jugar
       y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.</h1>
      </div>
-     <my-button>¡Jugar!</my-button>
+     <my-button class="start-button">¡Jugar!</my-button>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
       <the-move move="papel"></the-move>
@@ -107,15 +108,20 @@ export function initWaitingRoom(param) {
 
   `;
 
-  state.setOponentInformation();
+  state.setOpponentInformation();
 
   state.subscribe(() => {
-    const playerTwo = div.querySelector(".player-two");
+    const playerTwo = div.querySelector(".player-two")!;
     if (gameState.oponentName == "") {
       playerTwo.classList.add("disconnected");
     } else {
       playerTwo.classList.add("connected");
     }
+  });
+
+  const startButton = div.querySelector(".start-button")!;
+  startButton.addEventListener("click", async (e) => {
+    await state.setPLayerStatus(true);
   });
 
   // Tener en cuenta que puede pasar que alguien se desconecte en esta pantalla, de ser así debería redireccionarse nuevamente
