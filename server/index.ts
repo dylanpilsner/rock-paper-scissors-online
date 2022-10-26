@@ -84,7 +84,7 @@ app.put("/set-opponent-information/:privateId", async (req, res) => {
   res.json(validateOpponent());
 });
 
-app.post("/disconnect-player/:privateId", async (req, res) => {
+app.put("/disconnect-player/:privateId", async (req, res) => {
   const { privateId } = req.params;
   const { userId } = req.query;
   const roomRef = rtdb.ref(`rooms/${privateId}`);
@@ -144,6 +144,19 @@ app.put("/set-player-status/:privateId", async (req, res) => {
   const roomRef = rtdb.ref(`rooms/${privateId}`);
   await roomRef.child(`player${player}`).update({ start: status });
   res.json({ message: "status cambiado con éxito" });
+});
+
+app.put("/set-choice/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { choice, player } = req.body;
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+
+  if (choice == "") {
+    res.json({ message: "selección nula" });
+  } else {
+    await roomRef.child(`player${player}`).update({ choice });
+    res.json({ message: "selección actualizada con éxito" });
+  }
 });
 
 app.use(express.static("dist"));

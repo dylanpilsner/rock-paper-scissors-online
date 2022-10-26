@@ -108,7 +108,8 @@ export function initLobby(param) {
   div.appendChild(style);
 
   window.addEventListener("beforeunload", async (e) => {
-    await state.disconnectPlayer();
+    state.disconnectPlayer();
+    state.setPLayerStatus(false);
   });
 
   state.redirectToWaitingRoom(param.goTo);

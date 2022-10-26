@@ -1,11 +1,12 @@
 import { initWelcomePage } from "./pages/welcome";
 import { instructions } from "./pages/instructions";
-import { play } from "./pages/play";
+import { initPlayPage } from "./pages/play";
 import { results } from "./pages/results";
 import { initNewGame } from "./pages/new-game";
 import { initJoinGame } from "./pages/join-game";
 import { initLobby } from "./pages/lobby";
 import { initWaitingRoom } from "./pages/waiting-room";
+import { initWaitingOpponent } from "./pages/waiting-opponent";
 
 const routes = [
   {
@@ -18,7 +19,7 @@ const routes = [
   },
   {
     path: /\/play/,
-    component: play,
+    component: initPlayPage,
   },
   {
     path: /\/results/,
@@ -39,6 +40,10 @@ const routes = [
   {
     path: /\/waiting-room/,
     component: initWaitingRoom,
+  },
+  {
+    path: /\/waiting-opponent/,
+    component: initWaitingOpponent,
   },
 ];
 

@@ -22,6 +22,7 @@ const state = {
       opponentScore: 0,
       player: 0,
     },
+    result: "",
   },
 
   listeners: [],
@@ -36,12 +37,11 @@ const state = {
     onValue(room, async (snapshot) => {
       const data = await snapshot.val();
       currentState.gameState = data;
-      this.setState(currentState.gameState);
+      this.setState(currentState);
     });
   },
 
   async setOpponentInformation() {
-    const currentState = this.getState();
     const gameState = this.getState().gameState;
     const room = ref(rtdb, `rooms/${gameState.privateId}`);
 
@@ -55,7 +55,66 @@ const state = {
           body: JSON.stringify(gameState),
         }
       );
-      const opponentData = await res.json();
+      // const opponentData = await res.json();
+    });
+  },
+
+  declaresAWinner(opponentChoice) {
+    const { gameState } = this.getState();
+    const myChoice = gameState.choice;
+    if (myChoice == "piedra" && opponentChoice == "papel") {
+      return "lose";
+    }
+    if (myChoice == "piedra" && opponentChoice == "tijera") {
+      return "win";
+    }
+    if (myChoice == "piedra" && opponentChoice == "piedra") {
+      return "draw";
+    }
+    if (myChoice == "papel" && opponentChoice == "papel") {
+      return "draw";
+    }
+    if (myChoice == "papel" && opponentChoice == "tijera") {
+      return "lose";
+    }
+    if (myChoice == "papel" && opponentChoice == "piedra") {
+      return "win";
+    }
+    if (myChoice == "tijera" && opponentChoice == "papel") {
+      return "win";
+    }
+    if (myChoice == "tijera" && opponentChoice == "tijera") {
+      return "draw";
+    }
+    if (myChoice == "tijera" && opponentChoice == "piedra") {
+      return "lose";
+    }
+  },
+
+  async listenPlay(choice) {
+    const currentState = this.getState();
+    const gameState = this.getState().gameState;
+    gameState.choice = choice;
+    this.setState(currentState);
+    const room = ref(rtdb, `rooms/${gameState.privateId}`);
+    const opponentPLayer = gameState.player == 1 ? 2 : 1;
+    onValue(room, async (snapshot) => {
+      const data = await snapshot.val();
+      if (gameState.choice == "") {
+        const res = await fetch(
+          `${API_BASE_URL}/set-choice/${gameState.privateId}`,
+          {
+            method: "put",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ player: gameState.player, choice }),
+          }
+        );
+        const result = await this.declaresAWinner(
+          await data[`player${opponentPLayer}`].choice
+        );
+        currentState.result = result;
+        this.setState(currentState);
+      }
     });
   },
 
@@ -69,15 +128,24 @@ const state = {
       }
     });
   },
-  async statusRoom(callback) {
+  async listenStatusAndRedirect(callback: (param) => {}) {
     const gameState = this.getState().gameState;
     const opponentPlayer = gameState.player == 1 ? 2 : 1;
     const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
     onValue(roomPlayers, async (snapshot) => {
       const data = await snapshot.val();
-      if (data.opponentPlayer.start === false) {
+      console.log(data);
+
+      if (
+        data[`player${opponentPlayer}`].start === false &&
+        data[`player${gameState.player}`].start === true
+      ) {
         callback("/waiting-opponent");
-      } else {
+      }
+      if (
+        data[`player${opponentPlayer}`].start === true &&
+        data[`player${gameState.player}`].start === true
+      ) {
         callback("/play");
       }
     });
@@ -88,13 +156,12 @@ const state = {
   },
 
   setState(newState) {
-    const currentState = this.getState();
-    currentState.gameState = newState;
+    this.data = newState;
     for (let cb of this.listeners) {
       cb(newState);
     }
     console.log("Soy el state, he cambiado: ");
-    console.log(currentState);
+    console.log(newState);
   },
 
   async setNameAndCreateOrGetUserId(name) {
@@ -110,7 +177,7 @@ const state = {
     currentState.gameState.name = name;
     currentState.gameState.userId = res.userId;
 
-    this.setState(currentState.gameState);
+    this.setState(currentState);
   },
 
   async createNewRoom() {
@@ -128,7 +195,7 @@ const state = {
     currentState.gameState.publicId = data.publicId;
     currentState.gameState.privateId = data.privateId;
     currentState.gameState.player = 1;
-    this.setState(currentState.gameState);
+    this.setState(currentState);
   },
 
   async getRoomInformation(publicId) {
@@ -141,7 +208,7 @@ const state = {
     } else {
       currentState.gameState.privateId = data.privateId;
       currentState.gameState.publicId = publicId;
-      this.setState(currentState.gameState);
+      this.setState(currentState);
     }
   },
 
@@ -160,7 +227,7 @@ const state = {
     );
     const data = await res.json();
     currentState.gameState = data[0];
-    this.setState(currentState.gameState);
+    this.setState(currentState);
     console.log(data);
 
     return data;
@@ -171,7 +238,7 @@ const state = {
     const res = await fetch(
       `${API_BASE_URL}/disconnect-player/${gameState.privateId}?userId=${gameState.userId}`,
       {
-        method: "post",
+        method: "put",
         headers: {
           "content-type": "application/json",
         },

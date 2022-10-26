@@ -4,7 +4,7 @@ import "./components/moves";
 import { state } from "./state";
 
 (async function () {
-  const rootEl = await document.querySelector(".root");
+  const rootEl = await document.querySelector(".root")!;
   // state.init();
   initRoute(rootEl);
   // state.listenDataBase();

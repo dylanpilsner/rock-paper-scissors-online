@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import { state } from "../state";
 
 export function initNewGame(param) {
@@ -116,7 +115,7 @@ export function initNewGame(param) {
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const target = e.target as any;
-    const input = div.querySelector(".input");
+    const input = div.querySelector(".input")!;
     if (target["nombre"].value == "") {
       input.classList.add("void");
       return window.alert("Please enter your name");

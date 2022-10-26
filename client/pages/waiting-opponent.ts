@@ -1,6 +1,6 @@
 import { state } from "../state";
 
-export function initWaitingRoom(param) {
+export function initWaitingOpponent(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
   div.classList.add("main-container");
@@ -95,10 +95,8 @@ export function initWaitingRoom(param) {
     </div>
     </header>
     <div class="instructions-container">
-      <h1 class="title">Presioná jugar
-      y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.</h1>
+      <h1 class="title">Esperando a que ${gameState.opponentName} presione ¡Jugar!...</h1>
      </div>
-     <my-button class="start-button">¡Jugar!</my-button>
       <div class="move-container">
       <the-move class="hand" move="piedra"></the-move>
       <the-move move="papel"></the-move>
@@ -116,12 +114,6 @@ export function initWaitingRoom(param) {
     } else {
       playerTwo.classList.add("connected");
     }
-  });
-
-  const startButton = div.querySelector(".start-button")!;
-  startButton.addEventListener("click", async (e) => {
-    await state.setPLayerStatus(true);
-    await state.listenStatusAndRedirect(param.goTo);
   });
 
   // Tener en cuenta que puede pasar que alguien se desconecte en esta pantalla, de ser así debería redireccionarse nuevamente
