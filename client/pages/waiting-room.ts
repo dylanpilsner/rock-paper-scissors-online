@@ -109,14 +109,14 @@ export function initWaitingRoom(param) {
 
   state.setOpponentInformation();
 
-  state.subscribe(() => {
-    const playerTwo = div.querySelector(".player-two")!;
-    if (gameState.oponentName == "") {
-      playerTwo.classList.add("disconnected");
-    } else {
-      playerTwo.classList.add("connected");
-    }
-  });
+  // state.subscribe(() => {
+  //   const playerTwo = div.querySelector(".player-two")!;
+  //   if (gameState.oponentName == "") {
+  //     playerTwo.classList.add("disconnected");
+  //   } else {
+  //     playerTwo.classList.add("connected");
+  //   }
+  // });
 
   const startButton = div.querySelector(".start-button")!;
   startButton.addEventListener("click", async (e) => {

@@ -25,6 +25,7 @@ app.post("/new-room", async (req, res) => {
       choice: "",
       opponentName: "",
       opponentScore: 0,
+      opponentChoice: "",
       player: 1,
       online: true,
       start: false,
@@ -77,6 +78,7 @@ app.put("/set-opponent-information/:privateId", async (req, res) => {
   await roomRef.child(`player${player}`).update({
     opponentName: validateOpponent()[0].name,
     opponentScore: validateOpponent()[0].yourScore,
+    opponentChoice: validateOpponent()[0].choice,
   });
 
   // console.log(validateOpponent()[0].name);
@@ -146,17 +148,21 @@ app.put("/set-player-status/:privateId", async (req, res) => {
   res.json({ message: "status cambiado con éxito" });
 });
 
-app.put("/set-choice/:privateId", async (req, res) => {
+app.post("/set-choice/:privateId", async (req, res) => {
   const { privateId } = req.params;
   const { choice, player } = req.body;
   const roomRef = rtdb.ref(`rooms/${privateId}`);
 
-  if (choice == "") {
-    res.json({ message: "selección nula" });
-  } else {
+  // if (choice == "") {
+  //   res.json({ message: "selección nula" });
+  // } else {
+  if (choice) {
     await roomRef.child(`player${player}`).update({ choice });
-    res.json({ message: "selección actualizada con éxito" });
+  } else {
+    await roomRef.child(`player${player}`).update({ choice: "" });
   }
+  res.json({ message: "selección actualizada con éxito" });
+  // }
 });
 
 app.use(express.static("dist"));

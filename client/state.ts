@@ -1,7 +1,7 @@
 export { state };
 import { rtdb } from "./rtdb";
-import { getDatabase, onValue, ref } from "firebase/database";
-
+import { getDatabase, onValue, ref, off } from "firebase/database";
+import test from "node:test";
 export const API_BASE_URL =
   process.env.NODE_ENV == "production"
     ? "https://dp-rock-paper-scissors.herokuapp.com"
@@ -20,6 +20,7 @@ const state = {
       privateId: "",
       opponentName: "",
       opponentScore: 0,
+      opponentChoice: "",
       player: 0,
     },
     result: "",
@@ -91,20 +92,22 @@ const state = {
     }
   },
 
-  async listenPlay(choice) {
+  async listenPlay(choice, tat?) {
     const currentState = this.getState();
     const gameState = this.getState().gameState;
-    gameState.choice = choice;
-    this.setState(currentState);
+    // gameState.choice = choice;
+    // this.setState(currentState);
     const room = ref(rtdb, `rooms/${gameState.privateId}`);
     const opponentPLayer = gameState.player == 1 ? 2 : 1;
+
     onValue(room, async (snapshot) => {
       const data = await snapshot.val();
+
       if (gameState.choice == "") {
         const res = await fetch(
           `${API_BASE_URL}/set-choice/${gameState.privateId}`,
           {
-            method: "put",
+            method: "post",
             headers: { "content-type": "application/json" },
             body: JSON.stringify({ player: gameState.player, choice }),
           }
@@ -116,6 +119,23 @@ const state = {
         this.setState(currentState);
       }
     });
+    if (tat == "test") {
+      off(room);
+    }
+  },
+  async setChoice(choice) {
+    const { gameState } = this.getState();
+    const res = await fetch(
+      `${API_BASE_URL}/set-choice/${gameState.privateId}`,
+      {
+        method: "post",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ player: gameState.player, choice }),
+      }
+    );
+
+    const data = await res.json();
+    // console.log(data);
   },
 
   async redirectToWaitingRoom(callback) {
