@@ -1,9 +1,8 @@
 import { state } from "../state";
 
-export function initWaitingRoom(param) {
+export function initTest(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
-  const currentState = state.getState();
   div.classList.add("main-container");
 
   style.innerHTML =
@@ -86,6 +85,7 @@ export function initWaitingRoom(param) {
     `
 
     <header class="header">
+    <h1>VERSIÓN DE PRUEBA</h1>
     <div class="players-container">
     <span class="player-one">${gameState.name}: ${gameState.yourScore}</span>
     <span class="player-two connected">${gameState.opponentName}: ${gameState.opponentScore}</span>
@@ -107,7 +107,6 @@ export function initWaitingRoom(param) {
     </div>
 
   `;
-  state.setOpponentInformation();
 
   // state.subscribe(() => {
   //   const playerTwo = div.querySelector(".player-two")!;
@@ -121,9 +120,6 @@ export function initWaitingRoom(param) {
   const startButton = div.querySelector(".start-button")!;
   startButton.addEventListener("click", async (e) => {
     await state.setPLayerStatus(true);
-    if (currentState.redirect == false) {
-      state.redirect(param.goTo);
-    }
     // await state.listenStatusAndRedirect(param.goTo);
   });
 

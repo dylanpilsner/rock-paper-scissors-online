@@ -7,6 +7,7 @@ import { initJoinGame } from "./pages/join-game";
 import { initLobby } from "./pages/lobby";
 import { initWaitingRoom } from "./pages/waiting-room";
 import { initWaitingOpponent } from "./pages/waiting-opponent";
+import { initTest } from "./pages/test";
 
 const routes = [
   {
@@ -44,6 +45,10 @@ const routes = [
   {
     path: /\/waiting-opponent/,
     component: initWaitingOpponent,
+  },
+  {
+    path: /\/test/,
+    component: initTest,
   },
 ];
 

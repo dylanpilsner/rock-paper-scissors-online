@@ -1,6 +1,12 @@
 export { state };
 import { rtdb } from "./rtdb";
-import { getDatabase, onValue, ref, off } from "firebase/database";
+import {
+  getDatabase,
+  onValue,
+  ref,
+  ListenOptions,
+  off,
+} from "firebase/database";
 import test from "node:test";
 export const API_BASE_URL =
   process.env.NODE_ENV == "production"
@@ -24,6 +30,7 @@ const state = {
       player: 0,
     },
     result: "",
+    redirect: false,
   },
 
   listeners: [],
@@ -92,7 +99,7 @@ const state = {
     }
   },
 
-  async listenPlay(choice, tat?) {
+  async listenPlay() {
     const currentState = this.getState();
     const gameState = this.getState().gameState;
     // gameState.choice = choice;
@@ -103,39 +110,73 @@ const state = {
     onValue(room, async (snapshot) => {
       const data = await snapshot.val();
 
-      if (gameState.choice == "") {
-        const res = await fetch(
-          `${API_BASE_URL}/set-choice/${gameState.privateId}`,
-          {
-            method: "post",
-            headers: { "content-type": "application/json" },
-            body: JSON.stringify({ player: gameState.player, choice }),
-          }
-        );
-        const result = await this.declaresAWinner(
-          await data[`player${opponentPLayer}`].choice
-        );
-        currentState.result = result;
-        this.setState(currentState);
-      }
+      const result = await this.declaresAWinner(
+        await data[`player${opponentPLayer}`].choice
+      );
+      currentState.result = result;
+      this.setState(currentState);
     });
-    if (tat == "test") {
-      off(room);
-    }
   },
   async setChoice(choice) {
     const { gameState } = this.getState();
-    const res = await fetch(
-      `${API_BASE_URL}/set-choice/${gameState.privateId}`,
-      {
-        method: "post",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ player: gameState.player, choice }),
-      }
-    );
+    const res = fetch(`${API_BASE_URL}/set-choice/${gameState.privateId}`, {
+      method: "post",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ player: gameState.player, choice }),
+    });
 
-    const data = await res.json();
+    // const data = await res.json();
     // console.log(data);
+  },
+
+  async redirect(callback, dos?) {
+    const gameState = this.getState().gameState;
+    const currentState = this.getState();
+    const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
+    const opponentPlayer = gameState.player == 1 ? 2 : 1;
+
+    onValue(roomPlayers, async (snapshot) => {
+      const data = await snapshot.val();
+      console.log("Soy el redirect y me estoy ejecutando");
+
+      if (
+        data.player1.online === true &&
+        data.player2.online === true &&
+        data.player1.start === false &&
+        data.player2.start === false
+      ) {
+        callback("/waiting-room");
+      }
+      if (
+        data.player1.online === true &&
+        data.player2.online === true &&
+        data[`player${gameState.player}`].start === true &&
+        data[`player${opponentPlayer}`].start === false
+      ) {
+        callback("/waiting-opponent");
+      }
+
+      if (
+        data.player1.online === true &&
+        data.player2.online === true &&
+        data[`player${gameState.player}`].start === true &&
+        data[`player${opponentPlayer}`].start === true
+      ) {
+        callback("/play");
+      }
+      currentState.redirect = true;
+      this.setState(currentState);
+    });
+
+    if (dos === "dos") {
+      off(roomPlayers, "value");
+    }
+  },
+
+  setRedirectStatus(status) {
+    const currentState = this.getState();
+    currentState.redirect = status;
+    this.setState(currentState);
   },
 
   async redirectToWaitingRoom(callback) {
@@ -148,6 +189,7 @@ const state = {
       }
     });
   },
+
   async listenStatusAndRedirect(callback: (param) => {}) {
     const gameState = this.getState().gameState;
     const opponentPlayer = gameState.player == 1 ? 2 : 1;

@@ -156,11 +156,7 @@ app.post("/set-choice/:privateId", async (req, res) => {
   // if (choice == "") {
   //   res.json({ message: "selección nula" });
   // } else {
-  if (choice) {
-    await roomRef.child(`player${player}`).update({ choice });
-  } else {
-    await roomRef.child(`player${player}`).update({ choice: "" });
-  }
+  await roomRef.child(`player${player}`).update({ choice });
   res.json({ message: "selección actualizada con éxito" });
   // }
 });

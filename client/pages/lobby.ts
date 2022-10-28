@@ -112,7 +112,7 @@ export function initLobby(param) {
     state.setPLayerStatus(false);
   });
 
-  state.redirectToWaitingRoom(param.goTo);
+  state.redirect(param.goTo);
 
   // const form: any = div.querySelector(".form")!;
   // console.log(form.test.value);

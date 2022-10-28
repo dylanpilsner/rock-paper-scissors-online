@@ -4,8 +4,7 @@ export function initPlayPage(param) {
   let counter: any = 2;
   const div = document.createElement("div");
   const style = document.createElement("style");
-  const { gameState } = state.getState();
-
+  state.redirect(() => {}, "dos");
   div.classList.add("main-container");
 
   style.innerHTML =
@@ -18,7 +17,7 @@ export function initPlayPage(param) {
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .countdown-container {
     font-family: "Oswald";
     font-size: 100px;
@@ -27,20 +26,20 @@ export function initPlayPage(param) {
     display:flex;
     align-items:center;
   }
-  
+
   @media (min-width: 769px) {
     .countdown-container {
       font-size: 200px;
     }
   }
-  
+
   .moves-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: end;
     gap: 10px;
   }
-  
+
   @media (min-width: 769px) {
     .moves-container {
       gap: 45px;
@@ -55,7 +54,7 @@ export function initPlayPage(param) {
       transition:0.5s ease all;
       opacity:50%;
     }
-  
+
   `;
 
   div.innerHTML =
@@ -78,6 +77,7 @@ export function initPlayPage(param) {
       const target = e.target as any;
       const move = target.getAttribute("move");
       // state.setMove(move, randomMove);
+      await state.setChoice(move);
       // state.winner();
       const piedra = div.querySelector(".piedra")!;
       const papel = div.querySelector(".papel")!;
@@ -107,21 +107,36 @@ export function initPlayPage(param) {
 
   const intervalId = setInterval(async () => {
     const countdownContainer: any = div.querySelector(".countdown-container");
-    const currentGame = state.getState().currentGame;
+    const currentGame = state.getState();
     countdownContainer.innerHTML = counter;
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
+
       countdownContainer.style.display = "none";
       const test = div.querySelector(".chosen");
       const test2 = test?.getAttribute("move");
-      await state.listenPlay(test2);
-      if (gameState.choice == "" || gameState.opponentChoice == "") {
-        await state.setChoice("");
+      const test3 = test2 == null ? "" : test2;
+      // state.setChoice(test3);
+      // await state.listenPlay(test2);
+      const { gameState } = await state.getState();
+
+      if (
+        currentGame.gameState.choice === "" ||
+        currentGame.gameState.opponentChoice === ""
+      ) {
+        // console.log("hola");
+        await state.setRedirectStatus(false);
         await state.setPLayerStatus(false);
-        await state.listenPlay(test2, "test");
+        await state.setChoice("");
         param.goTo("/waiting-room");
+        // state.setChoice("");
+        // await state.setChoice("");
+        //   await state.listenPlay(test2, "hola");
       }
+      // {
+      // await state.listenPlay();
+      // }
       // if (currentGame.myPlay == "") {
       //   param.goTo("/instructions");
       // } else param.goTo("/results");
