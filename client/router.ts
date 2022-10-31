@@ -1,7 +1,7 @@
 import { initWelcomePage } from "./pages/welcome";
 import { instructions } from "./pages/instructions";
 import { initPlayPage } from "./pages/play";
-import { results } from "./pages/results";
+import { initResultsPage } from "./pages/results";
 import { initNewGame } from "./pages/new-game";
 import { initJoinGame } from "./pages/join-game";
 import { initLobby } from "./pages/lobby";
@@ -24,7 +24,7 @@ const routes = [
   },
   {
     path: /\/results/,
-    component: results,
+    component: initResultsPage,
   },
   {
     path: /\/new-game/,

@@ -4,7 +4,9 @@ export function initPlayPage(param) {
   let counter: any = 2;
   const div = document.createElement("div");
   const style = document.createElement("style");
+
   state.redirect(() => {}, "dos");
+  state.setOpponentInformation();
   div.classList.add("main-container");
 
   style.innerHTML =
@@ -73,79 +75,60 @@ export function initPlayPage(param) {
 
   const choice = div.querySelectorAll("the-move");
   choice.forEach(async (i) => {
-    i.addEventListener("click", async function connectedCallback(e) {
+    i.addEventListener("click", async (e) => {
       const target = e.target as any;
       const move = target.getAttribute("move");
-      // state.setMove(move, randomMove);
-      await state.setChoice(move);
-      // state.winner();
       const piedra = div.querySelector(".piedra")!;
       const papel = div.querySelector(".papel")!;
       const tijera = div.querySelector(".tijera")!;
-      if (move == "piedra") {
-        piedra.classList.add("chosen");
-        papel.classList.add("not-chosen");
-        tijera.classList.add("not-chosen");
-      } else if (move == "papel") {
-        papel.classList.add("chosen");
-        piedra.classList.add("not-chosen");
-        tijera.classList.add("not-chosen");
-      } else if (move == "tijera") {
-        tijera.classList.add("chosen");
-        piedra.classList.add("not-chosen");
-        papel.classList.add("not-chosen");
-      }
-      // await state.listenPlay(move, test);
+      await state.setChoice(move);
     });
   });
-  choice.forEach((i) => {
-    i.addEventListener("click", (e) => {
-      const target = e.target as any;
-      const move = target.getAttribute("move");
-    });
+
+  state.subscribe(() => {
+    const { gameState } = state.getState();
+
+    const piedra = div.querySelector(".piedra")!;
+    const papel = div.querySelector(".papel")!;
+    const tijera = div.querySelector(".tijera")!;
+
+    if (gameState.choice == "piedra") {
+      piedra.classList.add("chosen");
+      papel.classList.add("not-chosen");
+      tijera.classList.add("not-chosen");
+    } else if (gameState.choice == "papel") {
+      papel.classList.add("chosen");
+      piedra.classList.add("not-chosen");
+      tijera.classList.add("not-chosen");
+    } else if (gameState.choice == "tijera") {
+      tijera.classList.add("chosen");
+      piedra.classList.add("not-chosen");
+      papel.classList.add("not-chosen");
+    }
   });
 
   const intervalId = setInterval(async () => {
     const countdownContainer: any = div.querySelector(".countdown-container");
-    const currentGame = state.getState();
+    const { gameState } = state.getState();
     countdownContainer.innerHTML = counter;
     counter--;
     if (counter < 0) {
       clearInterval(intervalId);
-
       countdownContainer.style.display = "none";
-      const test = div.querySelector(".chosen");
-      const test2 = test?.getAttribute("move");
-      const test3 = test2 == null ? "" : test2;
-      // state.setChoice(test3);
-      // await state.listenPlay(test2);
-      const { gameState } = await state.getState();
+      await state.listenPlay();
+      await state.updateScore();
+      await state.setPLayerStatus(false);
+      state.setRedirectStatus(false);
 
-      if (
-        currentGame.gameState.choice === "" ||
-        currentGame.gameState.opponentChoice === ""
-      ) {
-        // console.log("hola");
-        await state.setRedirectStatus(false);
-        await state.setPLayerStatus(false);
-        await state.setChoice("");
+      if (gameState.opponentChoice === "" || gameState.choice === "") {
+        console.log("testeando if");
+        await state.setChoice("", true);
         param.goTo("/waiting-room");
-        // state.setChoice("");
-        // await state.setChoice("");
-        //   await state.listenPlay(test2, "hola");
+      } else {
+        param.goTo("/results");
       }
-      // {
-      // await state.listenPlay();
-      // }
-      // if (currentGame.myPlay == "") {
-      //   param.goTo("/instructions");
-      // } else param.goTo("/results");
     }
   }, 1000);
-
-  // if (currentGame.myPlay == "") {
-  //   param.goTo("/instructions");
-  // }
 
   div.appendChild(style);
 

@@ -12,6 +12,7 @@ class Moves extends HTMLElement {
     const div = document.createElement("div");
     const style = document.createElement("style");
     const move = this.getAttribute("move");
+    const state = this.getAttribute("state");
     div.classList.add("hand-container");
     function returnImage(theMove) {
       if (theMove == "piedra") {
@@ -32,13 +33,16 @@ class Moves extends HTMLElement {
 
   }
   
+  .hand.final-choice{
+    height:200px;
+  }
 
   `;
 
     div.innerHTML =
       /*html*/
 
-      ` <img class="hand" src=${returnImage(move)} /> `;
+      ` <img class="hand ${state}" src=${returnImage(move)} /> `;
     shadow.appendChild(div);
     shadow.appendChild(style);
   }

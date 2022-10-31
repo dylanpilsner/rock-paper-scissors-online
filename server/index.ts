@@ -30,6 +30,7 @@ app.post("/new-room", async (req, res) => {
       online: true,
       start: false,
       yourScore: 0,
+      result: "",
     },
   });
   const privateId = roomRef.key;
@@ -148,7 +149,7 @@ app.put("/set-player-status/:privateId", async (req, res) => {
   res.json({ message: "status cambiado con éxito" });
 });
 
-app.post("/set-choice/:privateId", async (req, res) => {
+app.put("/set-choice/:privateId", async (req, res) => {
   const { privateId } = req.params;
   const { choice, player } = req.body;
   const roomRef = rtdb.ref(`rooms/${privateId}`);
@@ -159,6 +160,16 @@ app.post("/set-choice/:privateId", async (req, res) => {
   await roomRef.child(`player${player}`).update({ choice });
   res.json({ message: "selección actualizada con éxito" });
   // }
+});
+
+app.put("/update-score/:privateId", async (req, res) => {
+  const { player, yourScore } = req.body;
+  const { privateId } = req.params;
+
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+
+  await roomRef.child(`player${player}`).update({ yourScore: yourScore + 1 });
+  res.json({ message: "score actualizado" });
 });
 
 app.use(express.static("dist"));

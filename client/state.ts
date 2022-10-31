@@ -7,7 +7,6 @@ import {
   ListenOptions,
   off,
 } from "firebase/database";
-import test from "node:test";
 export const API_BASE_URL =
   process.env.NODE_ENV == "production"
     ? "https://dp-rock-paper-scissors.herokuapp.com"
@@ -67,9 +66,10 @@ const state = {
     });
   },
 
-  declaresAWinner(opponentChoice) {
+  declaresAWinner() {
     const { gameState } = this.getState();
     const myChoice = gameState.choice;
+    const opponentChoice = gameState.opponentChoice;
     if (myChoice == "piedra" && opponentChoice == "papel") {
       return "lose";
     }
@@ -104,31 +104,49 @@ const state = {
     const gameState = this.getState().gameState;
     // gameState.choice = choice;
     // this.setState(currentState);
-    const room = ref(rtdb, `rooms/${gameState.privateId}`);
-    const opponentPLayer = gameState.player == 1 ? 2 : 1;
 
-    onValue(room, async (snapshot) => {
-      const data = await snapshot.val();
+    const result = await this.declaresAWinner();
+    currentState.result = result;
+    this.setState(currentState);
+  },
 
-      const result = await this.declaresAWinner(
-        await data[`player${opponentPLayer}`].choice
+  async updateScore() {
+    const currentState = this.getState();
+    const gameState = this.getState().gameState;
+    if (currentState.result == "win") {
+      const res = await fetch(
+        `${API_BASE_URL}/update-score/${gameState.privateId}`,
+        {
+          method: "put",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            yourScore: gameState.yourScore,
+            player: gameState.player,
+          }),
+        }
       );
-      currentState.result = result;
-      this.setState(currentState);
-    });
+    }
   },
-  async setChoice(choice) {
+
+  async setChoice(choice: string, reset?: boolean) {
     const { gameState } = this.getState();
-    const res = fetch(`${API_BASE_URL}/set-choice/${gameState.privateId}`, {
-      method: "post",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ player: gameState.player, choice }),
-    });
-
-    // const data = await res.json();
-    // console.log(data);
+    if (gameState.choice == "" || reset == true) {
+      const res = fetch(`${API_BASE_URL}/set-choice/${gameState.privateId}`, {
+        method: "put",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ player: gameState.player, choice }),
+      });
+    }
+    // if (reset == true) {
+    //   const res = fetch(`${API_BASE_URL}/set-choice/${gameState.privateId}`, {
+    //     method: "post",
+    //     headers: { "content-type": "application/json" },
+    //     body: JSON.stringify({ player: gameState.player, choice }),
+    //   });
+    // }
   },
 
+  // CORREGIR PARÁMETRO DOS POR TURNOFF
   async redirect(callback, dos?) {
     const gameState = this.getState().gameState;
     const currentState = this.getState();
@@ -179,39 +197,39 @@ const state = {
     this.setState(currentState);
   },
 
-  async redirectToWaitingRoom(callback) {
-    const gameState = this.getState().gameState;
-    const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
-    onValue(roomPlayers, async (snapshot) => {
-      const data = await snapshot.val();
-      if (data.player1.online === true && data.player2.online === true) {
-        callback("/waiting-room");
-      }
-    });
-  },
+  // async redirectToWaitingRoom(callback) {
+  //   const gameState = this.getState().gameState;
+  //   const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
+  //   onValue(roomPlayers, async (snapshot) => {
+  //     const data = await snapshot.val();
+  //     if (data.player1.online === true && data.player2.online === true) {
+  //       callback("/waiting-room");
+  //     }
+  //   });
+  // },
 
-  async listenStatusAndRedirect(callback: (param) => {}) {
-    const gameState = this.getState().gameState;
-    const opponentPlayer = gameState.player == 1 ? 2 : 1;
-    const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
-    onValue(roomPlayers, async (snapshot) => {
-      const data = await snapshot.val();
-      console.log(data);
+  // async listenStatusAndRedirect(callback: (param) => {}) {
+  //   const gameState = this.getState().gameState;
+  //   const opponentPlayer = gameState.player == 1 ? 2 : 1;
+  //   const roomPlayers = ref(rtdb, `rooms/${gameState.privateId}`);
+  //   onValue(roomPlayers, async (snapshot) => {
+  //     const data = await snapshot.val();
+  //     console.log(data);
 
-      if (
-        data[`player${opponentPlayer}`].start === false &&
-        data[`player${gameState.player}`].start === true
-      ) {
-        callback("/waiting-opponent");
-      }
-      if (
-        data[`player${opponentPlayer}`].start === true &&
-        data[`player${gameState.player}`].start === true
-      ) {
-        callback("/play");
-      }
-    });
-  },
+  //     if (
+  //       data[`player${opponentPlayer}`].start === false &&
+  //       data[`player${gameState.player}`].start === true
+  //     ) {
+  //       callback("/waiting-opponent");
+  //     }
+  //     if (
+  //       data[`player${opponentPlayer}`].start === true &&
+  //       data[`player${gameState.player}`].start === true
+  //     ) {
+  //       callback("/play");
+  //     }
+  //   });
+  // },
 
   getState() {
     return this.data;
