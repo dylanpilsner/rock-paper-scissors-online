@@ -34,7 +34,14 @@ const state = {
 
   listeners: [],
 
-  async listenDataBase() {
+  resetData(result) {
+    const currentState = this.getState();
+    const { gameState } = this.getState();
+    currentState.result = result;
+    state.setState(currentState);
+  },
+
+  async listenDatabase() {
     const currentState = this.getState();
     const gameState = this.getState().gameState;
     const room = ref(
@@ -66,7 +73,7 @@ const state = {
     });
   },
 
-  declaresAWinner() {
+  async declaresAWinner() {
     const { gameState } = this.getState();
     const myChoice = gameState.choice;
     const opponentChoice = gameState.opponentChoice;

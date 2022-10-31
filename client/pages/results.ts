@@ -1,6 +1,7 @@
 import { state } from "../state";
 
 export function initResultsPage(param) {
+  // state.resetData("");
   const win = require("url:../assets/win.png");
   const draw = require("url:../assets/draw.svg");
   const lose = require("url:../assets/lose.png");
@@ -151,6 +152,7 @@ export function initResultsPage(param) {
   </div>
   </div>
 `;
+
   function declaresResult() {
     const resultContainer = div.querySelector(".result-container")!;
     if (result == "win") {

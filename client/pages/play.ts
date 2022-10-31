@@ -36,6 +36,8 @@ export function initPlayPage(param) {
   }
 
   .moves-container {
+    position:absolute;
+    bottom:0;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     align-items: end;
@@ -65,7 +67,6 @@ export function initPlayPage(param) {
   <div class="countdown-container">
   <div class="countdown">3</div>
   </div>
-  <my-button class="test">Test</my-button>
   <div class="moves-container">
   <the-move state="play" move="piedra" class="piedra"></the-move>
   <the-move state="play" move="papel" class="papel"></the-move>
@@ -119,14 +120,15 @@ export function initPlayPage(param) {
       await state.updateScore();
       await state.setPLayerStatus(false);
       state.setRedirectStatus(false);
-
-      if (gameState.opponentChoice === "" || gameState.choice === "") {
-        console.log("testeando if");
-        await state.setChoice("", true);
-        param.goTo("/waiting-room");
-      } else {
-        param.goTo("/results");
-      }
+      setTimeout(() => {
+        if (gameState.opponentChoice === "" || gameState.choice === "") {
+          console.log("testeando if");
+          state.setChoice("", true);
+          param.goTo("/waiting-room");
+        } else {
+          param.goTo("/results");
+        }
+      }, 600);
     }
   }, 1000);
 

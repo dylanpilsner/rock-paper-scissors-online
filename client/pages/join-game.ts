@@ -132,7 +132,7 @@ export function initJoinGame(param) {
         );
         location.reload();
       } else {
-        await state.listenDataBase();
+        await state.listenDatabase();
         await state.setNameAndCreateOrGetUserId(target["name"].value);
         param.goTo("/lobby");
         // await state.joinGame();
