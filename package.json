@@ -22,5 +22,6 @@
     "build:api": "tsc",
     "build": "yarn build:front && yarn build:api",
     "start": "node ./server/index.js"
-  }
+  },
+  "type": "module"
 }
