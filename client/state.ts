@@ -34,6 +34,14 @@ const state = {
 
   listeners: [],
 
+  init() {
+    const state = JSON.parse(localStorage.getItem("saved-state")!);
+    const listeners = JSON.parse(localStorage.getItem("saved-listeners")!);
+    if (state) {
+      this.setState(state);
+    }
+  },
+
   resetData(result) {
     const currentState = this.getState();
     const { gameState } = this.getState();
@@ -247,8 +255,11 @@ const state = {
     for (let cb of this.listeners) {
       cb(newState);
     }
+
+    localStorage.setItem("saved-state", JSON.stringify(newState));
     console.log("Soy el state, he cambiado: ");
     console.log(newState);
+    console.log(`estos son los listeners: ${this.listeners}`);
   },
 
   async setNameAndCreateOrGetUserId(name) {
@@ -324,6 +335,20 @@ const state = {
     const gameState = this.getState().gameState;
     const res = await fetch(
       `${API_BASE_URL}/disconnect-player/${gameState.privateId}?userId=${gameState.userId}`,
+      {
+        method: "put",
+        headers: {
+          "content-type": "application/json",
+        },
+      }
+    );
+    const data = await res.json();
+    return data;
+  },
+  async connectPlayer() {
+    const gameState = this.getState().gameState;
+    const res = await fetch(
+      `${API_BASE_URL}/connect-player/${gameState.privateId}?userId=${gameState.userId}`,
       {
         method: "put",
         headers: {

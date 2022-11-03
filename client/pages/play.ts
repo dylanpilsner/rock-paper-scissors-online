@@ -49,6 +49,14 @@ export function initPlayPage(param) {
       gap: 45px;
     }
   }
+
+  
+  @media (min-width:1920px){
+    .moves-container{
+      gap:100px;
+    }
+  }
+
     .chosen{
       transition:0.5s ease all;
       transform:translateY(-30px);
@@ -58,6 +66,8 @@ export function initPlayPage(param) {
       transition:0.5s ease all;
       opacity:50%;
     }
+
+    
 
   `;
 

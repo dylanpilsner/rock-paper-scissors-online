@@ -5,7 +5,11 @@ export function initWaitingRoom(param) {
   const style = document.createElement("style");
   const currentState = state.getState();
   div.classList.add("main-container");
-
+  window.addEventListener("load", async () => {
+    await state.connectPlayer();
+    await state.redirect(param.goTo);
+    await state.listenDatabase();
+  });
   style.innerHTML =
     /*css*/
     `
@@ -76,6 +80,19 @@ export function initWaitingRoom(param) {
       gap:20px;
       align-items: flex-end;
       margin-top:50px;
+    }
+
+    @media (min-width: 769px) {
+      .move-container {
+        gap: 45px;
+      }
+    }
+
+    @media (min-width:1920px){
+      .move-container{
+        gap:100px;
+      }
+   
     }
   `;
 

@@ -76,6 +76,19 @@ export function initWaitingOpponent(param) {
       align-items: flex-end;
       margin-top:50px;
     }
+
+    @media (min-width: 769px) {
+      .move-container {
+        gap: 45px;
+      }
+    }
+
+    @media (min-width:1920px){
+      .move-container{
+        gap:100px;
+      }
+   
+    }
   `;
 
   const { gameState } = state.getState();

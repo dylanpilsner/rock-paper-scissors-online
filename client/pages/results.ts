@@ -106,9 +106,9 @@ export function initResultsPage(param) {
     text-align:center;
   }
 
-  .final-choice{
-    height:280px;
-  }
+  // .final-choice{
+  //   height:280px;
+  // }
   
   `;
 

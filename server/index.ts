@@ -103,6 +103,22 @@ app.put("/disconnect-player/:privateId", async (req, res) => {
     .update({ online: false });
   res.json({ message: "usuario desconectado con éxito" });
 });
+app.put("/connect-player/:privateId", async (req, res) => {
+  const { privateId } = req.params;
+  const { userId } = req.query;
+  const roomRef = rtdb.ref(`rooms/${privateId}`);
+  const roomRefData = await (await roomRef.get()).val();
+  const roomRefArray = lodash.map(roomRefData);
+  const validateUser = () => {
+    return roomRefArray.filter((i) => {
+      return i.userId.includes(userId);
+    });
+  };
+  await roomRef
+    .child(`player${validateUser()[0].player}`)
+    .update({ online: true });
+  res.json({ message: "usuario conectado con éxito" });
+});
 
 app.post("/join-game/:privateId", async (req, res) => {
   const { privateId } = req.params;
@@ -172,7 +188,7 @@ app.put("/update-score/:privateId", async (req, res) => {
   res.json({ message: "score actualizado" });
 });
 
-app.use(express.static("dist"));
+app.use(express.static(path.join(__dirname, "../dist")));
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });

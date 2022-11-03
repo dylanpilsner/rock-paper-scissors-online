@@ -77,6 +77,18 @@ export function initLobby(param) {
       align-items: flex-end;
     }
 
+    @media (min-width: 769px) {
+      .move-container {
+        gap: 45px;
+      }
+    }
+
+    @media (min-width:1920px){
+      .move-container{
+        gap:100px;
+      }
+   
+    }
 
 
   `;
@@ -106,11 +118,6 @@ export function initLobby(param) {
     </div>
   `;
   div.appendChild(style);
-
-  window.addEventListener("beforeunload", async (e) => {
-    state.disconnectPlayer();
-    state.setPLayerStatus(false);
-  });
 
   state.redirect(param.goTo);
 

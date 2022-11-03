@@ -30,11 +30,45 @@ class Moves extends HTMLElement {
       }
   .hand{
     height:128px;
-
+    cursor:pointer;
   }
   
   .hand.final-choice{
     height:200px;
+  }
+
+/* MAYOR A 1366 */
+  @media (min-width:1366px){
+    .hand.final-choice{
+      transition:initial;
+      height:250px;
+    }
+  }
+  @media (min-width:1366px){
+    .hand{
+     transition: 0.1s ease-in-out all;
+    }
+    .hand:hover{
+      height:140px;
+    }
+  }
+/* MAYOR A 1920 */
+  @media (min-width:1920px){
+    .hand.final-choice{
+      transition:initial;
+      height:300px;
+    }
+ 
+  }
+
+  @media (min-width:1920px){
+    .hand{
+     transition: 1s ease-in-out all;
+      height:initial;
+    }
+    .hand:hover{
+      height:200px;
+    }
   }
 
   `;

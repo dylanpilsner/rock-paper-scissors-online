@@ -60,6 +60,19 @@ export function initNewGame(param) {
     margin-top:10px;
     align-items:flex-end ;
   }
+
+  @media (min-width: 769px) {
+    .move-container {
+      gap: 45px;
+    }
+  }
+
+  @media (min-width:1920px){
+    .move-container{
+      gap:100px;
+    }
+ 
+  }
   
   .input{
   

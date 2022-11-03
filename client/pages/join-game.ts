@@ -61,6 +61,19 @@ export function initJoinGame(param) {
     align-items:flex-end ;
   }
 
+  @media (min-width: 769px) {
+    .move-container {
+      gap: 45px;
+    }
+  }
+
+  @media (min-width:1920px){
+    .move-container{
+      gap:100px;
+    }
+ 
+  }
+
   .inputs-container{
     display:flex;
     flex-direction:column;
