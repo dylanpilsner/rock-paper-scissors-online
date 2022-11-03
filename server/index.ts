@@ -1,4 +1,4 @@
-import { firestore, rtdb } from "./db.js";
+import { firestore, rtdb } from "./db";
 import { nanoid } from "nanoid";
 import * as lodash from "lodash";
 
