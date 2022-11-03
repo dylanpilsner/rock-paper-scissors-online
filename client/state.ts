@@ -8,7 +8,9 @@ import {
   off,
 } from "firebase/database";
 export const API_BASE_URL =
-  process.env.NODE_ENV == "production" ? "" : "http://localhost:3000";
+  process.env.NODE_ENV == "production"
+    ? "https://dp-rock-paper-scissors.herokuapp.com"
+    : "http://localhost:3000";
 
 const state = {
   data: {
