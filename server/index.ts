@@ -188,11 +188,11 @@ app.put("/update-score/:privateId", async (req, res) => {
   res.json({ message: "score actualizado" });
 });
 
-const pathResolve = path.resolve(__dirname, "../dist");
+const pathResolve = path.resolve("dist");
 
-app.use(express.static(pathResolve));
+app.use(express.static(path.join(__dirname, "../dist")));
 app.get("*", (req, res) => {
-  res.sendFile(pathResolve);
+  res.sendFile(path.join(__dirname, "../client/index.html"));
 });
 
 app.listen(port, () => {
