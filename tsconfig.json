@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "ESNext",
     "moduleResolution": "node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
   },
   "files":["./server/index.ts"]
 }
