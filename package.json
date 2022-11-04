@@ -19,7 +19,7 @@
     "dev:api": "nodemon ./server/index.ts",
     "build:front": "parcel build ./client/index.html",
     "test": "ava",
-    "build:api": "tsc ./server/index.ts",
+    "build:api": "tsc",
     "build": "yarn build:front && yarn build:api",
     "start": "node ./server/index.js"
   },
