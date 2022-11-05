@@ -1,4 +1,4 @@
-# Desafio Modulo 6
+# Desafío Módulo 6
 
 ## Requisitos
 
@@ -11,7 +11,7 @@
 
 
 ## Documentación
- * Documentación del backend hecha en POSTMAN
+ * Documentación del backend hecha en Postman
 
  * [Documentación](https://documenter.getpostman.com/view/17908890/UVC3kTL8)
 
