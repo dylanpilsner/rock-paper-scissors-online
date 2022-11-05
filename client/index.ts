@@ -8,7 +8,8 @@ import { state } from "./state";
   const rootEl = document.querySelector(".root")!;
   initRoute(rootEl);
   window.addEventListener("beforeunload", async (e) => {
-    state.resetData();
-    state.disconnectPlayer();
+    await state.resetData();
+    await state.setPLayerStatus(false);
+    await state.disconnectPlayer();
   });
 })();

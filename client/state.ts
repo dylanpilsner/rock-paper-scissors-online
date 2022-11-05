@@ -177,6 +177,14 @@ const state = {
       ) {
         callback("/waiting-opponent");
       }
+      if (
+        data.player1.online === true &&
+        data.player2.online === true &&
+        data[`player${gameState.player}`].start === false &&
+        data[`player${opponentPlayer}`].start === true
+      ) {
+        callback("/waiting-room");
+      }
 
       if (
         data.player1.online === true &&

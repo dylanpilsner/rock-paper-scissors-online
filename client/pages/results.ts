@@ -52,6 +52,13 @@ export function initResultsPage(param) {
     animation-delay: 0.5s;
     animation-fill-mode: forwards;
   }
+
+  @media (min-width:1920px){
+    .result-container{
+      max-width:450px;
+      margin-left:-225px;
+    }
+  }
   
   .result-container.draw {
     background-color: #828282b0;
