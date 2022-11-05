@@ -249,8 +249,6 @@ const state = {
     });
 
     const data = await res.json();
-    console.log("hola");
-
     currentState.gameState.publicId = data.publicId;
     currentState.gameState.privateId = data.privateId;
     currentState.gameState.player = 1;
