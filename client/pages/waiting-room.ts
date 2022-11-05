@@ -6,10 +6,9 @@ export function initWaitingRoom(param) {
   const currentState = state.getState();
   div.classList.add("main-container");
   window.addEventListener("load", async () => {
-    await state.connectPlayer();
-    await state.redirect(param.goTo);
-    await state.listenDatabase();
+    await state.refresh(param.goTo);
   });
+
   style.innerHTML =
     /*css*/
     `
@@ -60,7 +59,7 @@ export function initWaitingRoom(param) {
       display:flex;
     }
     
-    .title{
+    .instructions{
       color: black;
       letter-spacing: 5px;
       font-size:35px;
@@ -68,6 +67,19 @@ export function initWaitingRoom(param) {
       text-align:center;
       align-self:center;
       line-height:60px;
+    }
+
+    @media (min-width:1280px){
+      .instructions{
+        width:1000px;
+        font-size:40px;
+      }
+    }
+    @media (min-width:1500px){
+      .instructions{
+        width:1000px;
+        font-size:50px;
+      }
     }
     
     .code{
@@ -88,9 +100,10 @@ export function initWaitingRoom(param) {
       }
     }
 
-    @media (min-width:1920px){
+    @media (min-width:1500px){
       .move-container{
-        gap:100px;
+        margin-top:200px;
+        gap:80px;
       }
    
     }
@@ -113,7 +126,7 @@ export function initWaitingRoom(param) {
     </div>
     </header>
     <div class="instructions-container">
-      <h1 class="title">Presioná jugar
+      <h1 class="instructions">Presioná jugar
       y elegí: piedra, papel o tijera antes de que pasen los 3 segundos.</h1>
      </div>
      <my-button class="start-button">¡Jugar!</my-button>
@@ -126,26 +139,14 @@ export function initWaitingRoom(param) {
   `;
   state.setOpponentInformation();
 
-  // state.subscribe(() => {
-  //   const playerTwo = div.querySelector(".player-two")!;
-  //   if (gameState.oponentName == "") {
-  //     playerTwo.classList.add("disconnected");
-  //   } else {
-  //     playerTwo.classList.add("connected");
-  //   }
-  // });
-
   const startButton = div.querySelector(".start-button")!;
   startButton.addEventListener("click", async (e) => {
     await state.setPLayerStatus(true);
     if (currentState.redirect == false) {
       state.redirect(param.goTo);
     }
-    // await state.listenStatusAndRedirect(param.goTo);
   });
 
-  // Tener en cuenta que puede pasar que alguien se desconecte en esta pantalla, de ser así debería redireccionarse nuevamente
-  // al lobby. Sumar función disconnect player y aplicar lo mencionado.
   div.appendChild(style);
 
   return div;

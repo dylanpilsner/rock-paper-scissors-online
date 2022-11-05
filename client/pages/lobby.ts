@@ -1,9 +1,12 @@
+import { stat } from "fs";
 import { state } from "../state";
 
 export function initLobby(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
-
+  window.addEventListener("load", async () => {
+    await state.refresh(param.goTo);
+  });
   div.classList.add("main-container");
 
   style.innerHTML =
@@ -120,31 +123,6 @@ export function initLobby(param) {
   div.appendChild(style);
 
   state.redirect(param.goTo);
-
-  // const form: any = div.querySelector(".form")!;
-  // console.log(form.test.value);
-
-  // form.addEventListener("submit", (e) => {
-  //   e.preventDefault();
-  //   const target = e.target as any;
-  //   const input = div.querySelector(".input");
-  //   if (target["test"].value == "") {
-  //     input.classList.add("void");
-  //     return window.alert("Please enter your name");
-  //   } else {
-  //     input.classList.remove("void");
-  //     // state.setNameAndCreateOrGetUserId(target["test"].value);
-  //     // state.createNewRoom();
-  //     param.goTo("/lobby");
-  //   }
-  // });
-
-  // start.addEventListener("click", (e) => {
-  //   e.preventDefault;
-  //   console.log(form.test.value);
-
-  // state.setName()
-  // });
 
   return div;
 }

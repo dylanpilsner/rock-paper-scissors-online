@@ -5,7 +5,6 @@ import * as lodash from "lodash";
 import * as express from "express";
 import * as path from "path";
 const app = express();
-// const dev = process.env.NODE_ENV == "development";
 const port = process.env.PORT || 3000;
 app.use(express.json());
 
@@ -82,8 +81,6 @@ app.put("/set-opponent-information/:privateId", async (req, res) => {
     opponentChoice: validateOpponent()[0].choice,
   });
 
-  // console.log(validateOpponent()[0].name);
-
   res.json(validateOpponent());
 });
 
@@ -132,16 +129,12 @@ app.post("/join-game/:privateId", async (req, res) => {
       return i.userId.includes(gameState.userId);
     });
   };
-  // -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
   if (roomRefArray.length == 1 && validateUser() == "") {
     const player2 = await roomRef.update({
       player2: gameState,
     });
-    // if ((await await (await roomRef.get()).val()["player2"].player) == 0) {
-    await roomRef.child("player2").update({ player: 2 });
-    await roomRef.child("player2").update({ online: true });
-    // }
+    await roomRef.child("player2").update({ player: 2, online: true });
 
     res.json([await (await roomRef.get()).val()["player2"]]);
   }
@@ -170,12 +163,8 @@ app.put("/set-choice/:privateId", async (req, res) => {
   const { choice, player } = req.body;
   const roomRef = rtdb.ref(`rooms/${privateId}`);
 
-  // if (choice == "") {
-  //   res.json({ message: "selección nula" });
-  // } else {
   await roomRef.child(`player${player}`).update({ choice });
   res.json({ message: "selección actualizada con éxito" });
-  // }
 });
 
 app.put("/update-score/:privateId", async (req, res) => {

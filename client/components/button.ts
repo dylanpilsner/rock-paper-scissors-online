@@ -23,6 +23,17 @@ class Button extends HTMLElement {
       cursor:pointer;
     }
     
+    @media (min-width:1366px){
+    .button{
+      height:80px
+    }
+  }
+    @media (min-width:1920px){
+    .button{
+      width:404px;
+    }
+  }
+    
     .button:hover{
       background-color:#0056ca;
     }

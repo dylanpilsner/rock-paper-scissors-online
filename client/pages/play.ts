@@ -4,8 +4,10 @@ export function initPlayPage(param) {
   let counter: any = 2;
   const div = document.createElement("div");
   const style = document.createElement("style");
-
-  state.redirect(() => {}, "dos");
+  window.addEventListener("load", async () => {
+    await state.refresh(param.goTo);
+  });
+  state.redirect(() => {}, "off");
   state.setOpponentInformation();
   div.classList.add("main-container");
 
@@ -132,7 +134,6 @@ export function initPlayPage(param) {
       state.setRedirectStatus(false);
       setTimeout(() => {
         if (gameState.opponentChoice === "" || gameState.choice === "") {
-          console.log("testeando if");
           state.setChoice("", true);
           param.goTo("/waiting-room");
         } else {

@@ -84,10 +84,13 @@ export function initNewGame(param) {
     font-size:45px;
     text-align:center;
   }
-// label{
-//   display:block;
-// }
 
+  @media (min-width:1920px){
+    .input{
+      width:404px;
+    }
+  }
+  
 .button{
   background-color:transparent;
   border:none;
@@ -136,6 +139,7 @@ export function initNewGame(param) {
       input.classList.remove("void");
       await state.setNameAndCreateOrGetUserId(target["nombre"].value);
       await state.createNewRoom();
+      await state.listenDatabase();
       param.goTo("/lobby");
     }
   });

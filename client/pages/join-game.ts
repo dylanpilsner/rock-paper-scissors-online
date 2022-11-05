@@ -80,7 +80,17 @@ export function initJoinGame(param) {
     gap:10px;
   }
 
-  .input{
+  .input-name{
+
+    width:322px;
+    height:87px;
+    border: solid 10px #182460;
+    border-radius: 10px;
+    font-family:Odibee Sans;
+    font-size:45px;
+    text-align:center;
+  }
+  .input-code{
 
     width:322px;
     height:87px;
@@ -91,11 +101,34 @@ export function initJoinGame(param) {
     text-align:center;
   }
 
+
+
+  @media (min-width:1366px){
+    .input-name{
+      height:80px;
+    }
+    .input-code{
+      height:80px;
+    }
+  }
+  @media (min-width:1920px){
+    .input-name{
+      width:404px;
+    }
+    .input-code{
+      width:404px;
+    }
+  }
+
   .button{
     background-color:transparent;
     border:none;
   }
 
+  .void{
+    border: solid 10px #cb0000;
+    border-radius: 10px;
+  }
   `;
 
   div.innerHTML =
@@ -106,8 +139,8 @@ export function initJoinGame(param) {
      </div>
      <form class="form">
      <div class="inputs-container">
-     <input class="input" placeholder="Ingresa tu nombre" name="name">
-     <input class="input" placeholder="Código" name="code">
+     <input class="input-name" placeholder="Ingresa tu nombre" name="name">
+     <input class="input-code" placeholder="Código" name="code">
      </div>
      <button class="button">
      <my-button>Empezar</my-button>
@@ -123,43 +156,48 @@ export function initJoinGame(param) {
   div.appendChild(style);
 
   const form: any = div.querySelector(".form")!;
-  // state.listenDataBase();
 
   form.addEventListener("submit", async (e) => {
+    const inputName = div.querySelector(".input-name")!;
+    const inputCode = div.querySelector(".input-code")!;
     e.preventDefault();
     const target = e.target as any;
-    await state.setNameAndCreateOrGetUserId(target["name"].value);
-
-    if (
-      (await state.getRoomInformation(target["code"].value)) ==
-      "room inexistente"
-    ) {
-      window.alert(
-        "Esta sala no existe, por favor verifique nuevamente el código o cree una nueva sala."
-      );
+    const name = target["name"].value;
+    const code = target["code"].value;
+    if (name == "" && code == "") {
+      inputName.classList.add("void");
+      inputCode.classList.add("void");
+      return window.alert("Please enter the name and code room");
+    } else if (name == "") {
+      inputName.classList.add("void");
+      return window.alert("Please enter your name");
+    } else if (code == "") {
+      inputCode.classList.add("void");
+      return window.alert("Please enter the code room");
     } else {
-      let test = await state.joinGame();
-      if (test.message == "sala llena") {
-        window.alert(
-          "La sala se encuentra llena, por favor ingrese a otra o cree una nueva."
-        );
-        location.reload();
-      } else {
-        await state.listenDatabase();
-        await state.setNameAndCreateOrGetUserId(target["name"].value);
-        param.goTo("/lobby");
-        // await state.joinGame();
-        // const test = param.goTo("/test");
+      await state.setNameAndCreateOrGetUserId(target["name"].value);
 
-        //     // await state.redirectToWaitingRoom(param.goTo);
+      if (
+        (await state.getRoomInformation(target["code"].value)) ==
+        "room inexistente"
+      ) {
+        window.alert(
+          "Esta sala no existe, por favor verifique nuevamente el código o cree una nueva sala."
+        );
+      } else {
+        let roomStatus = await state.joinGame();
+        if (roomStatus.message == "sala llena") {
+          window.alert(
+            "La sala se encuentra llena, por favor ingrese a otra o cree una nueva."
+          );
+          location.reload();
+        } else {
+          await state.listenDatabase();
+          await state.setNameAndCreateOrGetUserId(target["name"].value);
+          param.goTo("/lobby");
+        }
       }
     }
   });
-
-  // const form: any = div.querySelector(".form")!;
-
-  // form.addEventListener("submit", async (e) => {
-  //   e.preventDefault();
-
   return div;
 }

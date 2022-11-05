@@ -1,15 +1,16 @@
 import { state } from "../state";
 
 export function initResultsPage(param) {
-  // state.resetData("");
   const win = require("url:../assets/win.png");
   const draw = require("url:../assets/draw.svg");
   const lose = require("url:../assets/lose.png");
   const div = document.createElement("div");
   const style = document.createElement("style");
   const result = state.getState().result;
-
-  console.log(state.getState());
+  window.addEventListener("load", async () => {
+    await state.listenDatabase();
+    await state.connectPlayer();
+  });
 
   div.classList.add("main-container");
 
@@ -101,15 +102,9 @@ export function initResultsPage(param) {
   
   .play-again-button {
     width: 100%;
-    // max-width: 260px;
     margin-top: 30px;
     text-align:center;
   }
-
-  // .final-choice{
-  //   height:280px;
-  // }
-  
   `;
 
   function chooseImage() {

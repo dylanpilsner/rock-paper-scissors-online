@@ -43,7 +43,6 @@ export function initWelcomePage(param) {
     display:grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap:20px;
-    /* height:100%; */
     margin-top:10px;
     align-items:flex-end ;
   }

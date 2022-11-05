@@ -5,12 +5,10 @@ import { state } from "./state";
 
 (async function () {
   state.init();
-  const rootEl = await document.querySelector(".root")!;
-  // state.init();
+  const rootEl = document.querySelector(".root")!;
   initRoute(rootEl);
   window.addEventListener("beforeunload", async (e) => {
+    state.resetData();
     state.disconnectPlayer();
-    state.setPLayerStatus(false);
   });
-  // state.listenDataBase();
 })();

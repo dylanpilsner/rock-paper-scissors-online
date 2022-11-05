@@ -118,17 +118,6 @@ export function initWaitingOpponent(param) {
 
   `;
 
-  // state.subscribe(() => {
-  //   const playerTwo = div.querySelector(".player-two")!;
-  //   if (gameState.oponentName == "") {
-  //     playerTwo.classList.add("disconnected");
-  //   } else {
-  //     playerTwo.classList.add("connected");
-  //   }
-  // });
-
-  // Tener en cuenta que puede pasar que alguien se desconecte en esta pantalla, de ser así debería redireccionarse nuevamente
-  // al lobby. Sumar función disconnect player y aplicar lo mencionado.
   div.appendChild(style);
 
   return div;
