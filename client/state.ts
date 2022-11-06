@@ -238,6 +238,24 @@ const state = {
     this.setState(currentState);
   },
 
+  resetGameState() {
+    const currentState = this.getState();
+    const { gameState } = this.getState();
+    gameState.userId = "";
+    gameState.choice = "";
+    gameState.name = "";
+    gameState.online = false;
+    gameState.start = false;
+    gameState.yourScore = 0;
+    gameState.publicId = "";
+    gameState.privateId = "";
+    gameState.opponentName = "";
+    (gameState.opponentScore = 0), (gameState.opponentChoice = "");
+    gameState.player = 0;
+
+    this.setState(currentState);
+  },
+
   async createNewRoom() {
     const currentState = this.getState();
     const res = await fetch(`${API_BASE_URL}/new-room`, {

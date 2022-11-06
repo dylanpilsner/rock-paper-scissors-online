@@ -1,8 +1,10 @@
+import { state } from "../state";
+
 export function initWelcomePage(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
   div.classList.add("main-container");
-
+  state.resetGameState();
   style.innerHTML =
     /*css*/
     `
