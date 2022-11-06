@@ -241,17 +241,20 @@ const state = {
   resetGameState() {
     const currentState = this.getState();
     const { gameState } = this.getState();
-    gameState.userId = "";
-    gameState.choice = "";
-    gameState.name = "";
-    gameState.online = false;
-    gameState.start = false;
-    gameState.yourScore = 0;
-    gameState.publicId = "";
-    gameState.privateId = "";
-    gameState.opponentName = "";
-    (gameState.opponentScore = 0), (gameState.opponentChoice = "");
-    gameState.player = 0;
+    currentState.gameState = {
+      userId: "",
+      choice: "",
+      name: "",
+      online: false,
+      start: false,
+      yourScore: 0,
+      publicId: "",
+      privateId: "",
+      opponentName: "",
+      opponentScore: 0,
+      opponentChoice: "",
+      player: 0,
+    };
 
     this.setState(currentState);
   },

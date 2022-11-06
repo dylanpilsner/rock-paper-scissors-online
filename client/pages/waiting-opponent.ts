@@ -4,7 +4,9 @@ export function initWaitingOpponent(param) {
   const div = document.createElement("div");
   const style = document.createElement("style");
   div.classList.add("main-container");
-
+  window.addEventListener("load", async () => {
+    await state.refresh(param.goTo);
+  });
   style.innerHTML =
     /*css*/
     `
