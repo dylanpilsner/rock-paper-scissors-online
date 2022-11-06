@@ -138,7 +138,7 @@ export function initNewGame(param) {
       return window.alert("Please enter your name");
     } else {
       input.classList.remove("void");
-      state.setNameAndCreateOrGetUserId(target["nombre"].value);
+      await state.setNameAndCreateOrGetUserId(target["nombre"].value);
       await state.createNewRoom();
       await state.listenDatabase();
       param.goTo("/lobby");
