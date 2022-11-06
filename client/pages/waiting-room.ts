@@ -69,13 +69,8 @@ export function initWaitingRoom(param) {
       line-height:60px;
     }
 
-    @media (min-width:1280px){
-      .instructions{
-        width:1000px;
-        font-size:40px;
-      }
-    }
-    @media (min-width:1500px){
+
+    @media (min-width:1700px){
       .instructions{
         width:1000px;
         font-size:50px;
@@ -100,7 +95,7 @@ export function initWaitingRoom(param) {
       }
     }
 
-    @media (min-width:1500px){
+    @media (min-width:1700px){
       .move-container{
         margin-top:200px;
         gap:80px;
