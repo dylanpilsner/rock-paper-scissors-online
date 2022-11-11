@@ -13,11 +13,11 @@
 ## Documentación
  * Documentación del backend hecha en Postman
 
- * [Documentación](https://documenter.getpostman.com/view/17908890/UVC3kTL8)
+ * [Documentación](https://documenter.getpostman.com/view/19369798/2s8YYFrP9Z)
 
 
 ## Link a la app 👇
- * [App](https://piedra-papel-o-tijeras.herokuapp.com/)
+ * [App](https://dp-rock-paper-scissors.herokuapp.com/)
 ## Tech Stack
 
 **Client:** TypeScript, Parcel, Custom Elements
