@@ -1,20 +1,19 @@
 import { firestore, rtdb } from "./db";
 import { nanoid } from "nanoid";
 import * as lodash from "lodash";
-
 import * as express from "express";
 import * as path from "path";
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
-
 const userCollection = firestore.collection("users");
 const roomCollection = firestore.collection("rooms");
+// console.log(process.env.PRIVATE_KEY);
+console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 
 app.post("/new-room", async (req, res) => {
   const { name, userId } = req.body;
   const roomRef = rtdb.ref("rooms/" + nanoid());
-
   await roomRef.set({
     player1: {
       name,
