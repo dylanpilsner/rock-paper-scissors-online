@@ -8,7 +8,6 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 const userCollection = firestore.collection("users");
 const roomCollection = firestore.collection("rooms");
-
 app.post("/new-room", async (req, res) => {
   const { name, userId } = req.body;
   const roomRef = rtdb.ref("rooms/" + nanoid());
