@@ -3,9 +3,11 @@ import { nanoid } from "nanoid";
 import * as lodash from "lodash";
 import * as express from "express";
 import * as path from "path";
+import * as cors from "cors";
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(express.json());
+app.use(cors());
 const userCollection = firestore.collection("users");
 const roomCollection = firestore.collection("rooms");
 app.post("/new-room", async (req, res) => {
