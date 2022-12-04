@@ -17,7 +17,7 @@
 
 
 ## Link a la app 👇
- * [App](https://dp-rock-paper-scissors.herokuapp.com/)
+ * [App](https://rock-paper-scissors-online.onrender.com/)
 ## Tech Stack
 
 **Client:** TypeScript, Parcel, Custom Elements
