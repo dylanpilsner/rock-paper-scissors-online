@@ -3,7 +3,7 @@ import { rtdb } from "./rtdb";
 import { onValue, ref, off } from "firebase/database";
 export const API_BASE_URL =
   process.env.NODE_ENV == "production"
-    ? "https://rock-paper-scissors-online.vercel.app/"
+    ? "https://dylanpilsner.github.io"
     : "http://localhost:3000";
 
 const state = {
