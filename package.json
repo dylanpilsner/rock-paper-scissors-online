@@ -2,7 +2,6 @@
   "name": "rock-paper-scissors-online",
   "version": "1.0.0",
   "description": "* Comunicarse usando los principios restful.\r * Permitir crear gamerooms.\r * Permitir jugar (o sea, empezar y terminar partidas) y llevar el score del room para siempre.\r * Tener una API documentada con Postman y con el link a la documentación en el Readme.md.\r * Subí la app a Heroku y agregá el link al juego en el Readme.md.",
-  "main": "index.js",
   "scripts": {
     "dev:front": "parcel serve ./client/index.html",
     "dev:api": "nodemon --watch ./server/index.ts --exec ts-node ./server/dev.ts",
