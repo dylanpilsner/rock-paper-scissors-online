@@ -1,9 +1,30 @@
 {
-  "name": "rock-paper-scissor-online",
+  "name": "rock-paper-scissors-online",
   "version": "1.0.0",
-  "license": "MIT",
+  "description": "* Comunicarse usando los principios restful.\r * Permitir crear gamerooms.\r * Permitir jugar (o sea, empezar y terminar partidas) y llevar el score del room para siempre.\r * Tener una API documentada con Postman y con el link a la documentación en el Readme.md.\r * Subí la app a Heroku y agregá el link al juego en el Readme.md.",
+  "main": "index.js",
+  "scripts": {
+    "dev:front": "parcel serve ./client/index.html",
+    "dev:api": "nodemon --watch ./server/index.ts --exec ts-node ./server/dev.ts",
+    "build:front": "parcel build ./client/index.html",
+    "test": "ava",
+    "build:api": "tsc ./server/index.ts",
+    "build": "yarn build:front && yarn build:api",
+    "start": "node ./server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dylanpilsner/rock-paper-scissors-online.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dylanpilsner/rock-paper-scissors-online/issues"
+  },
+  "homepage": "https://github.com/dylanpilsner/rock-paper-scissors-online#readme",
   "dependencies": {
-    "@types/node": "^18.11.0",
+    "@types/node": "^18.11.10",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -15,14 +36,5 @@
     "parcel": "^2.7.0",
     "process": "^0.11.10",
     "typescript": "^4.8.4"
-  },
-  "scripts": {
-    "dev:front": "parcel serve ./client/index.html",
-    "dev:api": "nodemon --watch ./server/index.ts --exec ts-node ./server/dev.ts",
-    "build:front": "parcel build ./client/index.html",
-    "test": "ava",
-    "build:api": "tsc ./server/index.ts",
-    "build": "yarn build:front && yarn build:api",
-    "start": "node ./server/index.js"
   }
 }
